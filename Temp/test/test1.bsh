@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Environment variables.
+# --> in .profile
+source $HOME"/.profile"
+
+############################################################################
+# Check has DT/F or TAP.
+#
+step=ChkDFTAP
+#
+echo "STEP  PGM " $step " bash" " ..."
+
+declare  line
+
+# Read input file by line.
+   while IFS='' read -r line || [[ -n $line ]]; do
+      # # NOTE: 0-based indexing in bash.
+      # if [[ "${line:111:7}" != "0000000" || "${line:122:7}" != "0000000" ]]; then
+         # echo "$line" >> $FILE_OT_YHAV
+      # else
+         # echo "$line" >> $FILE_OT_NHAV
+      # fi
+   # done  < $FILE_IN
+   
+      echo "$line"
+      echo ${#line}
+
+   # done  < "./CSP8216.orig.iso-8859-1.head10"
+   # done  < "./CSP8216.orig.iso-8859-1.head10.utf-8"
+   done  < "./2010.head"
+#
+
+exit $?
+#

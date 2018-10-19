@@ -1,0 +1,52 @@
+
+prcsGrpMT.py Started.
+
+Main started.
+
+('fcnt_in =', 1)
+('get_keys_types() line_in =', 'p1000\r\n', 'line_pv =', '')
+('get_keys_types() cur_key =', 'p1', 'prv_key =', '')
+('get_keys_types() cur_typ =', '0', 'prv_typ =', '')
+('line_in =', 'p1000\r\n')
+('line_pv =', '')
+('cur_key =', 'p1', 'prv_key =', '')
+('cur_typ =', '0', 'prv_typ =', '')
+first line
+('fcnt_in =', 2)
+('get_keys_types() line_in =', 'p3000\r\n', 'line_pv =', 'p1000\r\n')
+('get_keys_types() cur_key =', 'p3', 'prv_key =', 'p1')
+('get_keys_types() cur_typ =', '0', 'prv_typ =', '0')
+('line_in =', 'p3000\r\n')
+('line_pv =', 'p1000\r\n')
+('cur_key =', 'p3', 'prv_key =', 'p1')
+('cur_typ =', '0', 'prv_typ =', '')
+Master.
+('fcnt_in =', 3)
+('get_keys_types() line_in =', 'p3101\r\n', 'line_pv =', 'p3000\r\n')
+('get_keys_types() cur_key =', 'p3', 'prv_key =', 'p3')
+('get_keys_types() cur_typ =', '1', 'prv_typ =', '0')
+('line_in =', 'p3101\r\n')
+('line_pv =', 'p3000\r\n')
+('cur_key =', 'p3', 'prv_key =', 'p3')
+('cur_typ =', '1', 'prv_typ =', '')
+Trans.
+Prev-Master.
+Same keys.
+('fcnt_in =', 4)
+('fcnt_in =', 5)
+('get_keys_types() line_in =', 'p8201\r\n', 'line_pv =', 'p8000\r\n')
+('get_keys_types() cur_key =', 'p8', 'prv_key =', 'p8')
+('get_keys_types() cur_typ =', '1', 'prv_typ =', '0')
+('line_in =', 'p8201\r\n')
+('line_pv =', 'p8000\r\n')
+('cur_key =', 'p8', 'prv_key =', 'p8')
+('cur_typ =', '1', 'prv_typ =', '')
+Trans.
+Prev-Master.
+Same keys.
+('fcnt_in =', 6)
+Main ended.
+
+
+prcsGrpMT.py Ended.
+

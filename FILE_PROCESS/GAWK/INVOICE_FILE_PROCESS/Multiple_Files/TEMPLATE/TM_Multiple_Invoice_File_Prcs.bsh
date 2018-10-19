@@ -1,0 +1,231 @@
+#!/bin/bash
+
+#################################################################################################
+#                                                                                                                                                                                                                                                                                           ##
+#  Job:           TM_Prcs_Files_in_Dir.bsh
+#  Location:      /home/tede/n55115/Joblib/Utils/file_processing/FILES_IN_DIR_PROCESS/TEMPLATE
+#  
+#  Description:   Process all files in directory recursively or not.
+#  
+#################################################################################################
+#  
+#  Called by:     RUN.TM_Prcs_Files_in_Dir  <dir>  <rcrs>
+#  
+#  Parameters:    (see calling script documentation).
+#
+#
+#  Uses globals:  (see calling script documentation).
+#
+#################################################################################################
+#
+#  Function:
+#
+#  {
+#     #  Check for supplied parameters.
+#     house_keep()
+#
+#     #  STEP0001:
+#        #  Create file list to be processed.
+#        file_list = ...
+#
+#        foreach file_in in file_list
+#           # Create output file name.
+#           file_out = ...
+#
+#           # Process file_in and create file_out.
+#           do_something...
+#        end
+#  }
+#
+#################################################################################################
+#
+#  Output: Output files in directory <dir>.
+#
+#################################################################################################
+
+# Environment variables.
+# --> in .profile
+#
+# --> in RUN.JOB
+#        RCRS_YES
+#        RCRS_NOT
+
+# Parameters.
+#
+# DD_files.
+declare        DIR_IN
+#
+declare        p_rcrs
+#
+
+# Constants.
+readonly       ARGS_NBR=2
+readonly       JOB_RUN="./RUN.TM_Single_Invoice_File_Prcs.gawk.bsh"
+#
+readonly       THIS_JOB_FULL=$0
+readonly       THIS_JOB_SMPL=${0##*/}
+readonly       JOB_OUT=$THIS_JOB_smpl".outlist"
+readonly       JOB_ERR=$THIS_JOB_smpl".errlist"
+#
+readonly       FILE_OT_SUF=".ot"
+# readonly       FILE_OT_PRF="C"
+#
+
+# Variables.
+declare        step
+declare        pgm
+#
+
+# Functions.
+function chk_abnd_silent()
+{
+	# Checks return value of command.
+	# Called as:   chk_abnd_silent $?
+	# Notes:       Silent, does not print.
+	
+  local     abnd
+  
+  abnd=$1
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    sleep 1s
+    touch $JOB_OUT $JOB_ERR
+    exit $abnd
+  fi
+  
+  return 0
+}
+
+function chk_abnd()
+{
+	# Checks return value of command.
+	# Called as:   chk_abnd_silent $?
+	
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    sleep 1s
+    touch $JOB_OUT $JOB_ERR
+    exit $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+function house_keep()
+{
+   # Check number of command line parameters passed to script.
+   # Parse parameters.
+   #     Assign them to variables.
+   # Called as: house_keep $# $1 $2 ...
+
+  local     argc
+  
+  argc=$1
+  chk_abnd_silent $? # Check return status.
+  
+  # If number of arguments is incorrect.
+  if [ $argc -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $argc
+      echo "Must be = " $ARGS_NBR
+      echo "Usage: " $THIS_JOB_SMPL " <DIR_IN>"
+      exit 69
+  fi
+  
+  # Fill variables.
+  DIR_IN=$2
+  p_rcrs=$3
+
+  chk_abnd_silent $? # Check return status.
+  
+  return 0
+}
+#
+
+############################################################################
+# Script start.
+#
+echo; echo $THIS_JOB_FULL " started at " `date`; echo
+#
+
+# Check arguments and construct file names.
+house_keep $# $1 $2
+chk_abnd_silent $? # Check return status.
+
+echo "DIR_IN = @"$DIR_IN"@"; echo
+echo "p_rcrs = @"$p_rcrs"@"; echo
+#
+
+############################################################################
+#
+step=STEP0001
+
+declare        FILE_list=""
+declare        FILE_IN
+declare        FILE_IN_sngl
+declare        FILE_OT
+
+# Create FILE_list.
+#
+# If parameter is not for recursive.
+if [ $p_rcrs == $RCRS_NOT ]; then
+  FILE_list=$DIR_IN/'*' # Could be something like: $DIR_IN/'r*.f'
+else
+# If parameter is for recursive.
+if [ $p_rcrs == $RCRS_YES ]; then
+  # FILE_list=$(find $DIR_IN -type f -name 'r*.f')
+  FILE_list=$(find $DIR_IN -type f -name '*')
+fi
+fi
+
+# Foreach file in FILE_list.
+#
+for FILE_IN in $FILE_list; do
+  # If FILE_IN is not regular file.
+  if ! [ -f $FILE_IN ]; then
+    echo $FILE_IN " is not a regular file."
+    continue
+  fi
+  
+  # File setup start.
+  #
+  FILE_IN_sngl=${FILE_IN##*/}
+  # FILE_OT=$FILE_IN_sngl$FILE_OT_SUF
+  FILE_OT=$FILE_IN$FILE_OT_SUF
+  # FILE_OT=$FILE_OT_PRF$FILE_IN_sngl
+  chk_abnd_silent $?
+  #
+  # File setup end.
+  
+  # If output file exists.
+  if [ -f $FILE_OT ]; then
+    echo "Deleting file " $FILE_OT " ..."
+    # Delete file.
+    rm $FILE_OT
+    chk_abnd $?
+  fi
+
+  # Process file start.
+  #
+  echo; echo "Start file: " $FILE_IN " "  `date`
+
+  # Run Job.
+  $JOB_RUN  $FILE_IN  $FILE_OT  1>>$JOB_OUT  2>>$JOB_ERR
+  # Check return status.
+  chk_abnd_silent $?
+  echo "End file:   " $FILE_IN " "  `date`; echo
+  #
+  # Process file end.
+done
+#
+
+############################################################################
+# End of script.
+# 
+echo; echo $THIS_JOB_FULL " ended at " `date`
+#

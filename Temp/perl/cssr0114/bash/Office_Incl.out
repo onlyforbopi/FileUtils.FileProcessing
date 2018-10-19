@@ -1,0 +1,77 @@
+
+Office_Incl.bsh  started at  Thu Apr 14 21:32:42 EEST 2016
+
+Touching file  2010.xsty  ...
+Thu Apr 14 21:32:42 EEST 2016
+Done
+
+Touching file  2010.xstn  ...
+Thu Apr 14 21:32:42 EEST 2016
+Done
+
+Loading table  Thu Apr 14 21:32:42 EEST 2016  ...
+Loaded: @2@ lines.  Thu Apr 14 21:32:42 EEST 2016
+Array length: 2
+
+line_cnt_base = @100@
+line_cnt_xsty = @100@
+line_cnt_base = @200@
+line_cnt_xsty = @200@
+line_cnt_xsty = @0@
+line_cnt_base = @300@
+line_cnt_xsty = @300@
+line_cnt_base = @400@
+line_cnt_xsty = @100@
+line_cnt_base = @500@
+line_cnt_xsty = @200@
+line_cnt_base = @600@
+line_cnt_xsty = @400@
+line_cnt_base = @700@
+line_cnt_xsty = @500@
+line_cnt_base = @800@
+line_cnt_xsty = @600@
+line_cnt_base = @900@
+line_cnt_xsty = @700@
+line_cnt_base = @1000@
+line_cnt_xsty = @800@
+line_cnt_base = @1100@
+line_cnt_xsty = @900@
+line_cnt_base = @1200@
+line_cnt_xsty = @1000@
+line_cnt_base = @1300@
+line_cnt_xsty = @300@
+line_cnt_base = @1400@
+line_cnt_xsty = @1100@
+line_cnt_base = @1500@
+line_cnt_xsty = @400@
+line_cnt_base = @1600@
+line_cnt_xsty = @500@
+line_cnt_base = @1700@
+line_cnt_xsty = @600@
+line_cnt_base = @1800@
+line_cnt_xsty = @1200@
+line_cnt_base = @1900@
+line_cnt_xsty = @1300@
+line_cnt_base = @2000@
+line_cnt_xsty = @1400@
+line_cnt_base = @2100@
+line_cnt_xsty = @1500@
+line_cnt_base = @2200@
+line_cnt_xsty = @1600@
+line_cnt_base = @2300@
+line_cnt_xsty = @1700@
+line_cnt_base = @2400@
+line_cnt_xsty = @1800@
+line_cnt_base = @2500@
+line_cnt_xsty = @1900@
+line_cnt_base = @2600@
+line_cnt_xsty = @2000@
+
+Ended.
+Read : line_cnt_fltr = @2@
+Read : line_cnt_base = @2681@
+Same : line_cnt_xsty = @2010@
+Diff : line_cnt_xstn = @671@
+
+Office_Incl.bsh  ended at  Thu Apr 14 21:32:47 EEST 2016
+

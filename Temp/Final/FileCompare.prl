@@ -1,0 +1,44 @@
+#!/usr/bin/perl
+
+# Globals.
+my    $THIS_NAME = $0 . " script";
+my    $num_args  = $#ARGV + 1;
+# FILES.
+# Input.
+my    $FILE_IN_FLTR;
+my    $FILE_IN_BASE;
+# Output.
+my    $FILE_OT_xstY;
+my    $FILE_OT_xstN;
+
+# use strict;
+# use warnings;
+
+# Our (user-defined) Packages.
+#
+# use FileCompare qw( export_me export_me_too );  # import listed items
+#
+use CheckReturnArguments_pm;  # import default list of items.
+use FileCompare_pm;  # import default list of items.
+
+# export_me( 1 );
+# export_me_too( 1 );
+
+##########################################################################
+# Script start.
+print $THIS_NAME, " started\n";
+
+# 1. Check arguments and Construct File Names.
+print "@", $#ARGV + 1, "@", $ARGV[0], "@", $ARGV[1], "@\n";
+my ($FILE_IN_FLTR, $FILE_IN_BASE) = chkRtrnArgs($#ARGV + 1, $ARGV[0], $ARGV[1]);
+print "FILE_IN_FLTR:@ $FILE_IN_FLTR @\n";
+print "FILE_IN_BASE:@ $FILE_IN_BASE @\n";
+
+# 2. Do work and Write Output Files.
+my ($rtrn_code) = fileCmpr($FILE_IN_FLTR, $FILE_IN_BASE);
+print "rtrn_code = ", $rtrn_code, "\n";
+
+##########################################################################
+# Script end.
+print $THIS_NAME, " ended\n";
+#

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+
+
+#############################
+#!/bin/bash
+ 
+dir_in=$1
+echo $dir_in
+cd $dir_in
+ 
+du -ah $1 | sort -nr | cut -f2 | xargs -d '\n' du -sh

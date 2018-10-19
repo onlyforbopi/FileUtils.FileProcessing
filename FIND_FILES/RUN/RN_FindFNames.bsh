@@ -1,0 +1,167 @@
+#!/bin/bash
+
+#################################################################################################
+#  Function: TEMPLATE wrapper script that calls  RN_FindFNames.bsh which:
+#            - Iterates foreach file in directory <dir> (recursively).
+#            - Locates files which contain <p_srch_str> in their name
+#            - Writes output file (with proper name) in directory <dir>.
+#			 - Output file contains all file name matches that contain p_srch_str
+#
+#  Output: 	- Output file in directory where <p_file_out> is declared
+#			- If file out is declared without a directory path then output is placed in run directory
+#          	- Logs (outlist/errlist) in directory where job is ran.
+#
+#################################################################################################
+
+# FUNCTION:
+# Search recursively dir <p_srch_dir> for files containing string <p_srch_str>,
+# write file names to file <p_file_out>.
+# Search case sensitive for <p_case> = s, case unsensitive for <p_case> = u.
+
+# Environment variables.
+# --> in .profile
+#
+# --> in RUN.JOB
+#        CASE_SENS
+#        CASE_INSN
+#
+#        RCRS_YES
+#        RCRS_NOT
+
+# Parameters.
+declare        p_srch_dir
+declare        p_srch_str
+declare        p_file_out
+declare        p_case
+declare        p_rcrs
+#
+
+# Constants.
+readonly       ARGS_NBR=5
+#
+readonly       THIS_JOB_FULL=$0
+readonly       THIS_JOB_SMPL=${0##*/}
+#
+
+# Variables.
+declare        p_srch_str2
+
+# Functions.
+function chk_abnd_silent()
+{
+  local     abnd
+  
+  abnd=$1
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  fi
+  
+  return 0
+}
+#
+
+function chk_abnd()
+{
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  else
+    echo "Done"; echo
+  fi
+  
+  return 0
+}
+#
+
+function house_keep()
+{
+  local        nbr_args=$1
+  
+  if [ $nbr_args -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $nbr_args '. Must be: ' $ARGS_NBR '.'
+      echo "Usage: " $THIS_JOB_SMPL " <srch_dir> <srch_str> <file_out> s|i r|n"
+      exit 69
+  fi
+  
+  p_srch_dir=$2
+  p_srch_str=$3
+  p_file_out=$4
+  p_case=$5
+  p_rcrs=$6
+
+  chk_abnd_silent $? # Check return status.  
+
+  return 0
+}
+#
+
+############################################################################
+# Script start.
+#
+echo; echo $THIS_JOB_FULL " started at " `date`; echo
+
+# Check arguments and construct file names.
+house_keep $# $1 $2 $3 $4 $5
+chk_abnd_silent $? # Check return status.
+
+echo "p_srch_dir = @"$p_srch_dir"@"
+echo "p_srch_str = @"$p_srch_str"@"
+echo "p_file_out = @"$p_file_out"@"
+echo "p_case     = @"$p_case"@"
+echo "p_rcrs     = @"$p_rcrs"@"
+echo
+
+p_srch_str2="*""$p_srch_str""*"
+
+echo "FIXED PARAMETER" "$p_srch_str2"
+
+# Do work.
+
+# If p_rcrs is recursive.
+if [ $p_rcrs == $RCRS_YES ]; then
+   # If p_case is case sensitive.
+   if [ $p_case == $CASE_SENS ]; then
+      find $p_srch_dir  -type f -name  "$p_srch_str2" > $p_file_out
+   else
+   # If p_case is case insensitive
+   if [ $p_case == $CASE_INSN ]; then
+      find $p_srch_dir  -type f -iname "$p_srch_str2" > $p_file_out
+   fi
+   fi
+else
+# If p_rcrs is not recursive then use '-maxdepth 1' for one level directory traversal.
+if [ $p_rcrs == $RCRS_NOT ]; then
+   # If p_case is case sensitive.
+   if [ $p_case == $CASE_SENS ]; then
+      find $p_srch_dir  -maxdepth 1 -type f -name  "$p_srch_str2" > $p_file_out
+   else
+   # If p_case is case insensitive
+   if [ $p_case == $CASE_INSN ]; then
+      find $p_srch_dir  -maxdepth 1 -type f -iname "$p_srch_str2" > $p_file_out
+   fi
+   fi
+fi
+fi
+#
+
+############################################################################
+# End of script.
+# 
+echo; echo $THIS_JOB_FULL " ended at " `date`
+#
+
+
+
+
+
+
+
+
+

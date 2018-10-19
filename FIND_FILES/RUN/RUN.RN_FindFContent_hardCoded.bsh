@@ -1,0 +1,205 @@
+#!/bin/bash
+
+
+######################################################################################################
+#                                                                                                                                                                                                                                                                                           ##
+#  Job: RUN.RN_FindFContent.bsh
+#  Location: /home/tede/n55115/Joblib/Utils/file_processing/FIND_FILES/RUN 
+#  
+#  Usage: RUN.RN_FindFContent.bsh <parm_srch_dir> <parm_srch_str> <parm_file_out> s|u
+#  Parameters: 	<parm_srch_dir> : Input directory.
+#              	<parm_srch_str> : Search string
+#				<parm_file_out> : path to output file
+#                      Valid values: s or u respectively.
+#
+#  Calls: RN_FindFContent.bsh 
+#
+#  Global constants: CASE_SENS="s"
+#                    CASE_UNSN="u"
+#
+#  Function: TEMPLATE wrapper script that calls RN_FindFContent.bsh which:
+#            - Iterates foreach file in directory <dir> (recursively).
+#            - Searches each file for <parm_srch_str>
+#            - Writes output file (with all matches) in directory the job was ran.
+#
+#  Output:  - Output file in directory where <parm_file_out> is declared
+#			- If file out is declared without a directory path then output is placed in run directory
+#           - Logs (outlist/errlist) in directory where job is ran.
+#
+######################################################################################################
+
+
+
+# FUNCTION:
+# Search recursively dir <parm_srch_dir> for files containing string <parm_srch_str>,
+# write file names to file <parm_file_out>.
+# Search case sensitive for <parm_case> = s, case unsensitive for <parm_case> = u.
+
+# Environment variables.
+# --> in .profile
+source $HOME"/.profile"
+
+# Constants.
+readonly       ARGS_NBR=5
+readonly       JOB_RUN="RN_FindFContent.bsh"
+#
+readonly       THIS_JOB_FULL=$0
+readonly       THIS_JOB_SMPL=${0##*/}
+readonly       JOB_OUT=$THIS_JOB_SMPL".outlist"
+readonly       JOB_ERR=$THIS_JOB_SMPL".errlist"
+#
+declare -r -x  CASE_SENS="s"
+declare -r -x  CASE_UNSN="u"
+
+# Parameters.
+declare        parm_srch_dir
+declare        parm_srch_str
+declare        parm_file_out
+declare        parm_case
+
+# Variables
+declare        v_date
+
+# Functions.
+function chk_abnd_silent()
+{
+	# Checks return value
+	# Called as chk_abnd_silent $?
+  local     abnd
+  
+  abnd=$1
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  fi
+  
+  return 0
+}
+
+function chk_abnd()
+{
+	# Checks return value
+	# Called as chk_abnd_silent $?
+	# Same as above, prints on screen
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  else
+    echo "Done"; echo
+  fi
+  
+  return 0
+}
+
+function house_keep()
+{
+	# Checks parameters (number)
+	# Assign parameters to variables
+	# Called as house_keep $# $1 $2 $3 $4
+  local     argc
+  
+  argc=$1
+  chk_abnd_silent $? # Check return status.
+  
+  # Check number of arguments.
+  if [ $argc -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $argc
+      echo "Must be = " $ARGS_NBR
+      echo "Usage: " $THIS_JOB_SMPL " <parm_srch_dir> <parm_srch_str> <parm_file_out> s|u"
+      exit 69
+  fi
+  
+  # Fill variables.
+  parm_srch_dir=$2
+  parm_srch_str=$3
+  parm_file_out=$4
+  parm_case=$5
+  parm_srch_str="ÄÅÄÄÇÅ"
+
+  chk_abnd_silent $? # Check return status.  
+  
+  if [ $parm_case != $CASE_UNSN ] && [ $parm_case != $CASE_SENS ]; then
+     echo "Illegal 4th parameter = " $parm_case ' . Must be: ' $CASE_SENS ' or ' $CASE_UNSN ' .'
+     exit 68
+  fi
+  
+  return 0
+}
+
+############################################################################
+# Script start.
+#
+echo; echo $THIS_JOB_FULL " Started at ""$(date +"%Y-%m-%d %H:%M:%S::%N")"; echo
+echo $THIS_JOB_FULL " Started at ""$(date +"%Y-%m-%d %H:%M:%S::%N")" > $JOB_OUT; echo >> $JOB_OUT
+
+# Check arguments and construct file names.
+house_keep $# $1 $2 $3 $4
+chk_abnd $? # Check return status.
+#
+
+############################################################################
+#  Run job.
+#
+
+# Assign date
+v_date=$(date)
+echo $v_date
+
+# Report on Job, outlist and errlist
+echo "Submit Job     " $JOB_RUN " ..."
+echo "outlist_name = " $JOB_OUT
+echo "errlist_name = " $JOB_ERR
+echo
+# Report on Job parameters
+echo "parm_srch_dir = @"$parm_srch_dir"@"
+echo "parm_srch_str = @"$parm_srch_str"@"
+echo "parm_file_out = @"$parm_file_out"@"
+echo "parm_case     = @"$parm_case"@"
+echo
+#
+# Report on Job, outlist, errlist in outlist
+echo $v_date >> $JOB_OUT
+echo "Submit Job     " $JOB_RUN " ..." >> $JOB_OUT
+echo "outlist_name = " $JOB_OUT        >> $JOB_OUT
+echo "errlist_name = " $JOB_ERR        >> $JOB_OUT
+echo >> $JOB_OUT
+# Report on Job parameters in outlist
+echo "parm_srch_dir = @"$parm_srch_dir"@" >> $JOB_OUT
+echo "parm_srch_str = @"$parm_srch_str"@" >> $JOB_OUT
+echo "parm_file_out = @"$parm_file_out"@" >> $JOB_OUT
+echo "parm_case     = @"$parm_case"@"     >> $JOB_OUT
+echo >> $JOB_OUT
+#
+# Call Job with the given parameters
+$JOB_RUN  $parm_srch_dir  $parm_srch_str  $parm_file_out  $parm_case \
+          1>>$JOB_OUT  2>$JOB_ERR
+#  Check return status.
+chk_abnd $?
+#
+
+############################################################################
+sleep 1s
+touch $JOB_OUT $JOB_ERR
+chk_abnd $? #  Check return status.
+
+############################################################################
+# Script end.
+#
+echo; echo >> $JOB_OUT; 
+echo $THIS_JOB_FULL " Ended at   ""$(date +"%Y-%m-%d %H:%M:%S::%N")"; echo
+echo $THIS_JOB_FULL " Ended at   ""$(date +"%Y-%m-%d %H:%M:%S::%N")" >> $JOB_OUT
+chk_abnd $? # Check return status.
+
+sleep 1s
+touch $JOB_OUT $JOB_ERR
+chk_abnd_silent $? # Check return status.
+#
+
+exit $?
+#

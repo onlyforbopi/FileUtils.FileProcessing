@@ -1,0 +1,187 @@
+#!/bin/bash
+
+# Environment variables.
+# --> in .profile
+
+
+# Run as:
+# ./filesplitter.bsh active_for_check.txt 10100
+
+
+# Important variables.
+declare        	step
+declare        	pgm
+declare        	pgm_full_path
+
+# Non-important variables.
+declare        	this_job
+readonly        THIS_JOB_NAME=${0##*/}
+readonly        LOGFILEPRIV
+readonly        LOGFILELOCAL 
+
+# File I/O
+declare			FILE_IN=$1
+declare         LINE_NO=$2
+
+
+
+# Functions.
+
+
+function chk_abnd()
+{
+  local     abnd
+  
+  abnd=$1
+  date
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    #rm +++++++++++++
+    exit $abnd
+    #return $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+
+# function usage(){
+
+	
+
+# }
+
+
+# function logging(){
+
+	
+
+# }
+
+
+
+
+function input_control()
+{
+
+	FILE_INPUT=$1
+	FILE_NUMBE=$2
+
+	echo "@@"
+	echo "Performing input control...."
+	
+	# Check if parameter 1 is a filename
+	echo "Checking types of arguments..."
+	if [[ -d $FILE_INPUT ]]; then
+		echo "$FILE_INPUT is a directory. Terminating."
+		exit 1
+	elif [[ -f $FILE_INPUT ]]; then
+		echo "$FILE_INPUT is a file. Proceeding ..."; echo
+	else
+		echo "$FILE_INPUT is not valid. Terminating."
+		exit 1
+	fi
+	
+	# Check if file has permissions
+	echo "Checking parameter file permissions..."
+	[ -w $file ] && echo "Write = yes" || echo "Write = No"
+ 
+	# find out if file has excute permission or not
+	[ -x $file ] && echo "Execute = yes" || echo "Execute = No"
+ 
+	# find out if file has read permission or not
+	[ -r $file ] && echo "Read = yes" || echo "Read = No"
+	
+	# Check if parameter 2 is numerical
+	echo; echo "Checking if second parameter is numerical"
+	case $FILE_NUMBE in
+		''|*[!0-9]*) 	echo "Second Parameter: $FILE_NUMBE is not numerical. Terminating..."
+						echo
+						exit 2
+						;;
+		*) 				echo "Second Parameter: $FILE_NUMBE is numerical.Proceeding..." 
+						echo
+						;;
+	esac
+	
+	echo "Input Control: Successful"
+
+}
+
+
+
+
+function splitter(){
+	
+	# Called as splitter $FILE_IN #LINE_NO
+	
+	INPUT_FILE=$1
+	LINE_NUMBE=$2
+	
+	echo "@@"
+	echo "Performing Split of input file: $INPUT_FILE"
+	
+	awk -v var=$INPUT_FILE -v var2=$LINE_NUMBE '{filename = var int((NR-1)/var2) ".txt"; print >> filename}' $INPUT_FILE
+	
+	return 0
+
+}
+
+
+round() {
+  printf "%.${2}f" "${1}"
+}
+
+
+function estimate(){
+
+	# Assign Parameters
+	INPUT_FILE=$1
+	LINE_NUMBE=$2
+	
+	
+	# Count Number of lines
+	NUMOFLINES=$(wc -l < $FILE_IN)
+	
+	# Calculate estimate of split
+	EXPECTED=$(($NUMOFLINES/$LINE_NUMBE))
+	EXPECTED_F=$(($EXPECTED+1))
+
+	# Reporting
+	echo "@@"
+	echo "Performing Sizing Input File and estimating..."
+	echo "Input File has: $NUMOFLINES lines."
+	echo "Calculating number of output files..."
+	echo "Output Files expected: $EXPECTED_F"
+	echo "Output Files will be numbered: 0 - $EXPECTED"
+	echo "Size estimation: Success"
+
+
+}
+
+
+
+############################################################################
+# Script start.
+echo
+# this_job=${0##*/}
+# echo $this_job " started at " `date`; echo
+echo $THIS_JOB_NAME " started at " `date`; echo
+
+input_control $FILE_IN $LINE_NO
+chk_abnd $?
+
+estimate $FILE_IN $LINE_NO
+chk_abnd $?
+
+splitter $FILE_IN $LINE_NO
+chk_abnd $?
+
+############################################################################
+# End of script.
+# 
+# echo $this_job " ended at " `date`; echo
+echo $THIS_JOB_NAME " ended at " `date`; echo
+#
+
+

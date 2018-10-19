@@ -1,0 +1,16 @@
+RUN.DetectCharacters.bsh performed at Fri Sep  9 12:39:27 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Single_File :: Inputs = TEST.txt
+RUN.DetectCharacters.bsh performed at Fri Sep  9 12:39:48 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Single_File :: Inputs = TEST.txt
+RUN.DetectCharacters.bsh performed at Fri Sep  9 12:40:44 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Single_File :: Inputs = TEST.txt
+RUN.DetectCharacters.bsh performed at Fri Sep  9 12:42:07 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Single_File :: Inputs = TEST.txt
+RUN.DetectCharacters.bsh performed at Fri Sep  9 12:44:47 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Single_File :: Inputs = TEST.txt
+RUN.DetectCharacters.bsh performed at Fri Sep  9 12:45:52 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Single_File :: Inputs = TEST.txt
+RUN.DetectCharacters.bsh performed at Fri Sep  9 12:48:08 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Single_File :: Inputs = TEST.txt
+RUN.DetectCharacters.bsh performed at Fri Sep  9 12:48:20 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Directory :: Inputs = TESTDIR/
+RUN.DetectCharacters.bsh performed at Mon Sep 12 10:35:23 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Single_File :: Inputs = TEST.txt
+RUN.DetectCharacters.bsh performed at Mon Sep 12 10:36:28 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Directory :: Inputs = TESTDIR/
+RUN.DetectCharacters.bsh performed at Fri Oct  7 11:39:13 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Directory :: Inputs = /home/tede/n55115/PD/TESTDIR
+RUN.DetectCharacters.bsh performed at Fri Oct  7 11:41:17 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Directory :: Inputs = /home/tede/n55115/PD/TESTDIR/
+RUN.DetectCharacters.bsh performed at Fri Oct  7 15:00:13 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Directory :: Inputs = /home/tede/n55115/PD/TESTDIR/
+RUN.DetectCharacters.bsh performed at Fri Oct  7 15:00:56 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Directory :: Inputs = /home/tede/n55115/PD/TESTDIR/
+RUN.DetectCharacters.bsh performed at Fri Oct  7 15:01:29 EEST 2016 :: Subscript = ./detect.bsh :: Mode = Single_File :: Inputs = /home/tede/n55115/PD/TESTDIR/testsed.out
+RUN.DetectCharacters.bsh performed at Wed Dec 13 09:49:41 EET 2017 :: Subscript = detect.bsh :: Mode = Single_File :: Inputs = METAB_20171212.TXT

@@ -1,0 +1,49 @@
+#!/usr/bin/perl
+
+# Globals.
+my    $THIS_NAME = $0;
+my    $num_args  = $#ARGV + 1;
+# FILES.
+# Input.
+my    $FILE_IN_FLTR;
+my    $FILE_IN_BASE;
+# Output.
+my    $FILE_OT_xstY;
+my    $FILE_OT_xstN;
+
+# use strict;
+# use warnings;
+
+# use foo qw( export_me export_me_too );  # import listed items
+use foo;  # import default list of items.
+
+# export_me( 1 );
+# export_me_too( 1 );
+
+# Script start.
+print $THIS_NAME, " script started\n";
+
+# # Get two variables back
+# my ($one, $two) = get_two();
+# print "One: $one\n";
+# print "Two: $two\n";
+
+# checkReturnArguments(2, 1);
+# checkReturnArguments(a, b);
+# checkReturnArguments(a);
+# checkReturnArguments(a, b);
+# checkReturnArguments(-3, -1);
+# checkReturnArguments(-3);
+# checkReturnArguments(1);
+#
+# my ($one, $two) = checkReturnArguments($ARGV[0], $ARGV[1]);
+# print "One: $one\n";
+# print "Two: $two\n";
+# print "Oneone: $oneone\n";
+# print "Twotwo: $twotwo\n";
+my ($FILE_IN_FLTR, $FILE_IN_BASE) = checkReturnArguments($ARGV[0], $ARGV[1]);
+print "FILE_IN_FLTR: $FILE_IN_FLTR\n";
+print "FILE_IN_BASE: $FILE_IN_BASE\n";
+
+# Script end.
+print $THIS_NAME, " script ended\n";

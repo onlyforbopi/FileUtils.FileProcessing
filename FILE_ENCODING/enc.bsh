@@ -1,0 +1,41 @@
+# Constants
+readonly 	FILE_IN=$1
+readyonly 	convert_to="utf-8"						# take it as parameter?
+
+
+# Variables
+size_in									
+size_ot
+
+# detect encoding and store it into $CHARSET
+CHARSET="$(file -bi "$FILE_IN"| awk -F "=" '{print $2}')"
+
+# Count size of input file
+size_in=$(wc -c $FILE_IN | awk '{print $1}')
+
+# Report on the encoding you found and list and logging
+echo " File : $1 :: Encoding : $CHARSET : Filesize = $size_in -- "
+
+# Maintain backup in child directory "Oldencoding"
+mkdir
+
+
+# Change encoding if it needs to
+if [ "$CHARSET" != "convert_to" ]; 
+then
+    iconv -f $CHARSET -t utf8 "$FILE_IN" -o $FILE_IN.enc    
+else
+	cp $FILE_IN $FILE_IN.enc
+fi
+
+
+# Count size of output file		
+size_ot="$(wc -c $FILE_IN | awk '{print $1}')"		
+		
+# Report on output encoding
+echo " File : $FILE_IN.enc :: Encoding : $convert_to : Filesize = $size_ot \n"
+
+#Logging
+echo " File $FILE_IN with encoding $CHARSET converted to file $FILE_IN.enc with encoding $convert_to "
+
+

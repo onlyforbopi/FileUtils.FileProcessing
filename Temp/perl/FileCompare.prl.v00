@@ -1,0 +1,188 @@
+#!/usr/bin/perl
+
+# Uses.
+#use strict;
+#use warnings;
+# use autodie;
+# use Encode;
+# use utf8;
+use Text::Tabs;
+# use Text::Unidecode;
+# Text:Unidecode would also solve this problem but needs special installation
+# Encode; is necessary for decode_utf8
+# Alternate version : Use $ARGS[0,1...] so that user can supply input files as parameters (TO DO)
+use Readonly;
+
+# Constants.
+# use   constant    ARGMS_CRCT     => 2;
+Readonly    my    $ARGMS_CRCT_GLBL    => 2;
+
+# Functions.
+sub checkArguments{
+   # variables.
+   my $cnt_argms; # total number of arguments passed.
+   
+   # get it.
+   $cnt_argms = scalar(@_);
+
+   # check it.
+   if ($cnt_argms != $ARGMS_CRCT_GLBL)
+   {
+      print "\nUsage: +++++++++++name.pl first_name last_name\n";
+      exit;
+   }
+   
+   print "Hello, World!\n";
+}
+
+
+###################################################################################################
+# Filter = filefilter
+# Base = filebase
+# Script will check which lines of Filter exist in the base
+# If line of filter exists in base then print line of base to YESHAVE4
+# If line of filter doesnt exit in base then print line of base to NOHAVE4
+#
+#
+# Version :
+# Checked for greek font, substring before / after greek / tabs
+# filter, base
+#
+# How to use :
+# Run with PERL_UNICODE=S perl script.pl
+# DOES NOT WORK IF THE INPUT FILES CONTAIN TABS. / NEEDS EXPAND ON LINUX
+# --
+# expand -t4 infile > outfile
+# PERL_UNICODE=S perl script.pl
+#
+# t4 : because n++ views tab as 4 spaces.
+#####################################################################################################
+
+
+# FILE INPUT : Declare input files and assign them to variables
+my $filebase = shift || "2010";
+my $filefilter = shift || "office_codes.txt";
+
+# This sets the STDOUT so that it can support unicode characters
+# STDOUT is normally a non-unicode handle
+# binmode(STDOUT, ":utf8");
+
+# FILE OUTPUT : Declare output files and assign them to variables
+open my $fh1, '>', '2010.xstY';
+open my $fh2, '>', '2010.xstN';
+# open fh2, '>', 'file2';
+
+# VARIABLES - Initialize variables
+my $arrayinit = "X";
+my %results;
+my $srch;
+my $chek;
+
+##################################################################						
+# Open Filter - read lines						
+open my $file1, '<', $filefilter;													
+while (my $line = <$file1>) 
+{
+
+	# Remove trailing new line and white space characters
+	chomp($line);
+	
+	# decode_utf8 tells perl that the string contains Unicode data in UTF-8 encoding
+	# $line = decode_utf8( $line );
+	
+	# Convert tabs to spaces
+	$line = expand($line);
+	
+	# Substring loaded into filter (Offset 0! - Always one less than n++)
+	my $load = substr("$line", 0, 3);
+	#start from digit, length of string
+	
+	# Print substring load for check purposes! (TEST)
+	print "$load \n";
+	
+	# Increment hash for each string loaded
+	$results{$load}++
+	
+	# my $results{$load} = $arrayinit;
+	# $results{$load} = "$arrayinit";
+}							
+
+##############################################################################
+
+# Separate filter load values from base search values (TEST)
+print "@@@@@@@@@@@@@@@@@\n";
+
+##############################################################################
+# Open base, read lines
+open my $file2, '<', $filebase;	
+# open ( my $file2, "<:utf8", $filebase);												
+while (my $line = <$file2>) 
+{
+
+	# Remove trailing new line
+    chomp($line);
+	
+	# decode_utf8 tells perl that the string contains Unicode data in UTF-8 encoding
+	# $line = decode_utf8( "$line" );
+	
+	# Convert tabs to spaces
+	$line = expand($line);
+	
+	# Value to search for, e.g. [0..29]
+	# (Offset 0! - Always one less than n++)
+	my $srch = substr("$line", 139, 3);
+	
+	# my $srch = Encode::decode( 'iso-8859-1', $srch );
+	# Print substring on base for check purposes! (TEST)
+	# print "$srch \n";
+	
+	# my $srch = "substr($line, 0, 30)"; # ?mOno gia to an uparxoun kena sthn arxg h sto telos?
+	# chek = results[0..29]
+	
+	# Assign to substring search to variable check
+	my $chek = $results{$srch};
+	# my $chek = "$results{$srch}";
+	
+	# Control block on check.
+	if ($chek >= 1) # string compare.
+	{
+	
+	# We use this command to get rid of the "Wide character in print" warning perl gives
+	# It can be used with STDOUT or appropriate filehandle, and perl will treat it as UTF-8 capable
+	# binmode($fh1, ":utf8");
+	
+	# Print output line and trailing new line 
+	print {$fh1} "$line\n";
+	}
+	else
+	{
+	# print fh2 "$line";
+	# print fh2 $line;
+	
+	# We use this command to get rid of the "Wide character in print" warning perl gives
+	# It can be used with STDOUT or appropriate filehandle, and perl will treat it as UTF-8 capable
+	# binmode($fh2, ":utf8");
+	
+	# Print output line and trailing new line
+	print {$fh2} "$line\n";
+	}
+}							
+
+###########################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

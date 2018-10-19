@@ -1,0 +1,131 @@
+#!/bin/bash
+
+# Environment variables.
+# --> in .profile
+
+# Parameters.
+#
+# DD_files.
+declare        DIR_IN
+
+# Constants.
+readonly       ARGS_NBR=1
+#
+readonly       THIS_JOB_FULL=$0
+readonly       THIS_JOB_SMPL=${0##*/}
+#
+readonly       FILE_OT_SUF=".cp"
+# readonly       FILE_OT_PRF="C"
+
+# Variables.
+declare        step
+declare        pgm
+
+# Functions.
+function chk_abnd_silent()
+{
+  local     abnd
+  
+  abnd=$1
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  fi
+  
+  return 0
+}
+
+function chk_abnd()
+{
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+function house_keep()
+{
+  local     argc
+  
+  argc=$1
+  chk_abnd_silent $? # Check return status.
+  
+  if [ $argc -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $argc
+      echo "Must be = " $ARGS_NBR
+      echo "Usage: " $THIS_JOB_SMPL " <DIR_IN>"
+      exit 69
+  fi
+  
+  DIR_IN=$2
+  chk_abnd_silent $? # Check return status.
+  
+  return 0
+}
+
+############################################################################
+# Script start.
+#
+echo; echo $THIS_JOB_FULL " started at " `date`; echo
+#
+
+# Check arguments and construct file names.
+house_keep $# $1
+chk_abnd_silent $? # Check return status.
+
+echo "DIR_IN = @"$DIR_IN"@"; echo
+
+############################################################################
+#
+step=STEP0001
+
+declare        FILE_IN
+declare        FILE_IN_sngl
+declare        FILE_OT
+
+# Foreach file in dir DIR_IN.
+#
+# for FILE_IN in $DIR_IN/r*.f; do
+for FILE_IN in $DIR_IN/*; do
+  # If FILE_IN is not regular file.
+  if ! [ -f $FILE_IN ]; then
+    echo $FILE_IN " is not a regular file."
+    continue
+  fi
+  
+  # File setup.
+  #
+  FILE_IN_sngl=${FILE_IN##*/}
+  FILE_OT=$FILE_IN_sngl$FILE_OT_SUF
+  # FILE_OT=$FILE_IN$FILE_OT_SUF
+  # FILE_OT=$FILE_OT_PRF$FILE_IN_sngl
+  chk_abnd_silent $?
+  
+  if [ -f $FILE_OT ]; then
+    echo "Deleting file " $FILE_OT " ..."
+    rm $FILE_OT
+    # chk_abnd_silent $?
+    chk_abnd $?
+  fi
+
+  # Process file.
+  echo; echo "Start file: " $FILE_IN_sngl " "  `date`
+  # tr '\000' '\040' < $FILE_IN > $FILE_OT
+  cp $FILE_IN $FILE_OT
+  echo "End file:   " $FILE_IN_sngl " "  `date`; echo
+done
+#
+
+############################################################################
+# End of script.
+# 
+echo; echo $THIS_JOB_FULL " ended at " `date`
+#

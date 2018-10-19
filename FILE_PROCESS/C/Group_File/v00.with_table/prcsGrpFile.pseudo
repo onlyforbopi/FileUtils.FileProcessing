@@ -1,0 +1,68 @@
+/*
+    * Lush prwtou epipedou (se pseudoglwssa).
+    *
+
+   main()
+      first_time = true;
+
+      // line = sa.
+      for line in cursor
+         if first_time
+            init_group();
+            process_line(line); -- add_line_to_table();
+
+            first_time = false;
+
+            continue for;
+         end-if;
+
+         --
+         -- ###!!! Changed. --> NA YLOPOIH8EI STO BODY !!!###
+         --
+         -- // Same group.
+         -- if line.key == line_prev.key
+         --    cnt_group++;
+         --    sum_group += line.amount;
+         -- // Different group.
+         -- else
+         --    write_group();
+         --    init_group(); // typically: exactly what is done at first_time -- above if.
+         -- end-if;
+         -- add_line_to_table();
+
+         --
+         -- ###!!! New Logic. --> NA YLOPOIH8EI STO BODY !!!###
+         --
+         // Different group.
+         if line.key != line_prev.key
+            write_group();
+            init_group(); // typically: exactly what is done at first_time -- above if.
+         end-if;
+
+         process_line(line);
+         // ? + line_prev = line; ?
+      end-for;
+
+      // (At End) Write last group.
+      write_group();
+   end main().
+
+   init_group()
+      cnt_group = 0;
+      sum_group = 0;
+      line_prev = line;
+   end init_group();
+
+   write_group()
+      for i in 1..cnt_group
+         write(table[i], cnt_group, sum_group);
+      end-for;
+   end write_group();
+
+   process_line(line)
+      cnt_group++;
+      sum_group += line.amount;
+      -- add_line_to_table()
+      table[cnt_group] = line;
+   end process_line;
+   */

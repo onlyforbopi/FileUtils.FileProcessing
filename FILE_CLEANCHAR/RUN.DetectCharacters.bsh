@@ -1,0 +1,402 @@
+#!/bin/bash
+
+
+#################################################################################################
+#                                                                                                                                                                                                                                                                                           ##
+#  Job: RUN.DetectCharacters.bsh	
+#  Location: /home/tede/n55115/Joblib/Utils/file_processing/FILE_CLEANCHAR
+#  
+#  Usage:RUN.DetectCharacters.bsh
+#  Parameters: None
+#
+#  Calls: detect.bsh
+#
+#  Global constants: choice
+#                    
+#  Function: wrapper script that calls detect.bsh which:
+#			 - Iterates over lines of file provided or
+#            - Iterates over lines foreach file in directory <dir> (non recursively).
+#            - Processes each file.
+#            - Writes output file (with proper name) in directory <dir>.
+#
+#  Output: - Output files in directory <dir>.
+#          - Logs (outlist/errlist) in directory where job is runed.
+#
+#  Menu Options :
+#	
+#		1. Detect Null values                                               		
+#	    2. Detect Extended Ascii (+Greek Font)									
+#	    3. Detect non printable characters										
+#	    4. Detect non printable and Extended Ascii (+Greek)						
+#	    5. Detect non printable and extended ascii (greek characters notincluded)
+#	    6. Detect Spam Characters (K. Athanasopoulos)                            
+#	    7. Detect all of the above                                               
+#	
+#	
+#	
+#
+#################################################################################################
+
+
+
+#########################################################
+# I/O
+export 			DIR_IN
+
+#########################################################
+# Constants
+readonly       ARGS_NBR=1
+readonly       JOB_PRF="detect"
+readonly       JOB_SUF=".bsh"
+readonly       LST_SUF=".out"
+readonly       ERR_SUF=".err"
+readonly       THIS_JOB=${0##*/}
+readonly       LOG_FILE="./$THIS_JOB.LOG"
+
+##########################################################
+# Variables
+declare        step
+declare -x     pgm
+declare        pgm_full_path
+declare -x     mode
+declare        DIR_IN
+declare	-x	   choice
+declare -x     operation
+
+
+##########################################################
+# Functions
+
+function usage()
+{
+	# prints usage
+
+echo "
+Syntax :
+
+$THIS_JOB [ Filename | Directory ]
+ ex. $THIS_JOB filename.txt  
+ Output into : Directory of filename.txt
+		
+ ex. $THIS_JOB /home/tede/n55115/dir/
+ Output into : Directory specified "		
+}
+
+function menu(){
+
+	# Clear Screen
+	clear
+
+	# Display Menu
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	echo "@ Detect Spam Characters v.1                                                            @"
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	echo "@                                                                                       @"
+	echo "@	1. Detect Null values                                                                 @"
+	echo "@	2. Detect Extended Ascii (+Greek Font)                                                @"
+	echo "@	3. Detect non printable characters                                                    @"
+	echo "@	4. Detect non printable and Extended Ascii (+Greek)                                   @"
+	echo "@	5. Detect non printable and extended ascii (greek characters are not included)        @"
+	echo "@	6. Detect Spam Characters (K. Athanasopoulos)                                         @"
+	echo "@	7. Detect all of the above                                                            @"
+	echo "@                                                                                       @"
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	echo 
+
+	# Display Prompt
+	echo -n "Enter choice : "; read choice
+
+	# Assign value to pgm
+	case $choice in
+		1)  pgm='-n'	
+			operation='Detect Null Characters' 
+			;;
+		2) 	pgm='-a'
+			operation='Detect extended ascii and greek fonts' 
+			;;
+		3) 	pgm='-p'
+			operation='Detect non printable' 
+			;;
+		4) 	pgm='-b'	
+			operation='Detect non printable and extended ascii - greek' 
+			;;
+		5) 	pgm='-e'	
+			operation='Detect non printable and extended ascii (greek characters are not included)' 
+			;;
+		6) 	pgm='-k'	
+			operation='Detect spam characters ( Kostas - Cobol List (Char transform)' 
+			;;
+		7) 	pgm='-s'	
+			operation='Detect All' 
+			;;
+		*)  pmg='error'
+			usage
+			echo "Wrong choice, exiting script.";
+			exit
+			;;
+	esac
+	
+	# Clear screen again
+	clear
+	
+	# DEBUG
+	# echo " \$pgm : $pgm ";
+	# echo " \$operation : $operation ";
+	# read
+
+}
+
+
+function chk_abnd()
+{
+	# Checks return value
+	# Called as chk_abnd $?
+
+  local     abnd
+  
+  abnd=$1
+  echo "Checking return value.."
+  date
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    #rm +++++++++++++
+    exit $abnd
+    #return $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+
+function constr_file_names()
+{
+  # Set DD_files names.
+  
+  DIR_IN=$1
+  chk_abnd $? # Check return status.
+
+  return 0
+}
+						
+function constr_job_name()
+{
+	# Constructs names for Job, outlist, errlist
+
+  job_name=$JOB_PRF$JOB_SUF
+  out_name=$JOB_PRF$LST_SUF
+  err_name=$JOB_PRF$ERR_SUF
+  chk_abnd $? # Check return status.
+
+  return 0
+}
+
+
+function get_script_dir () {
+	
+	# Constructs the absolute path of the script
+	# Called as get_script_dir $0
+																															
+     SOURCE="${BASH_SOURCE[0]}"																												
+     while [ -h "$SOURCE" ]; do
+          DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+          SOURCE="$( readlink "$SOURCE" )"
+          
+          [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+     done
+     DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+     echo "$DIR"
+}			
+			
+			
+function chk_args()
+{
+	# Checks number of arguments
+	# Checks type of arguments
+	# Called as chk_args $# $1 $2 ...
+
+  local        nbr_args=$1
+  
+  if [ $nbr_args -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $nbr_args
+      usage
+      exit 69
+  else
+	 echo "User has supplied the correct number of arguments"
+     # parm_srch_str=$2
+     # parm_file_out=$3
+     return 0
+  fi
+}
+
+						
+function set_mode()
+{
+	# Parses command line argument provided
+	# Runs check directory/single file and assigns mode
+	# Called as set_mode
+	
+	if [ -d $DIR_IN ]
+	then
+		mode="Directory"
+	else 
+	
+		if [ -e $DIR_IN ]
+		then
+			mode="Single_File"
+		else
+			echo "Invalid Input, Parameter is neither a file or directory"
+			exit 69
+		fi
+	fi		
+}
+
+function checkfileexist()
+{
+	# Checks if file exists
+	# Called as : checkfileexist(input)
+	
+	FILETEST=$1
+	if [ -f $FILETEST ]; then
+		echo "File '$FILETEST' Exists"; echo "Proceeding..."; echo
+	elif [ -d $FILETEST ]; then
+		echo "Directory '$FILETEST' Exists"; echo "Proceeding..."; echo
+	else
+		echo "The File '$FILE' Does Not Exist"; echo
+		exit 
+fi
+}
+
+function removeoldrunfiles()
+{
+	# Performs cleanup on old runfiles
+	
+	outfile=$1
+	errfile=$2
+	rm $outfile
+	rm $errfile	
+}
+
+##################################################################			
+# Script Start
+echo "------------------------------------------------------"
+echo $THIS_JOB " started at " `date`; echo
+
+# Call menu
+menu
+
+# Check arguments
+echo "Checking number of arguments..."
+chk_args $#
+chk_abnd $?
+echo "--"; echo
+				
+# Construct file names
+echo "Constructing File names..."; 
+constr_file_names $1
+echo "--"; echo
+
+# Construct Job .
+echo "Constructing Job name..."
+constr_job_name
+echo "--"; echo
+
+# Cleanup old run files
+removeoldrunfiles $out_name $err_name
+
+#Set mode
+echo "Setting script mode"
+set_mode
+chk_abnd $?
+echo "--"; echo
+
+# Check if files / directories exist
+checkfileexist $1
+
+# Printing job names
+echo "Submit Job " $job_name " ..."
+echo "out_name = " $out_name
+echo "err_name = " $err_name	
+echo "--"; echo
+
+# Printing script mode	
+echo "Script will run on mode : $mode : "; 
+echo "Script will perform operation : $operation "; 
+echo "Script will be performed on $1"; echo	
+echo "--";
+echo "Press a key to continue ..."; read
+	
+	
+	# Parse mode
+	case $mode in
+	
+	
+		# Single File Input
+		Single_File) 
+		echo $DIR_IN
+			
+			# Static number of files = 1
+			noffiles=1 
+			counter=1
+			
+			# Call Job
+			# Parameters pgm (type of lookup) (input)
+			$job_name $pgm $DIR_IN 1>$out_name 2>$err_name
+			chk_abnd $?
+		;;
+		
+		
+		# Multiple File Input
+		Directory)
+		
+		echo "Performing job on directory $DIR_IN"
+		echo "Output directory in $(get_script_dir $0)"; 
+		
+		#Count files in directory
+		# Pipe ls into wc
+		noffiles=$(($(ls -l $DIR_IN | wc -l ) - 1))
+		echo "Directory $DIR_IN contains $noffiles files"; echo "--"; echo
+		
+		# for every file of the input directory <dir>
+		for FILE in $DIR_IN*.*	
+		do
+			# increment counter
+			counter=$(($counter +1 ))
+			echo "Performing job on file : $FILE"
+		
+			# Call Job
+			$job_name $pgm $FILE 1>>$out_name 2>>$err_name
+			chk_abnd $?
+		
+		done
+		;;
+	esac
+
+echo "--"	
+	
+###################################################################
+# Controls and Reporting
+
+# Check number of files I/O
+echo "Checking input/output..."
+echo "Number of input files = $noffiles"
+echo "Number of files processed = $counter"
+echo "--"
+if [[ $counter != $noffiles ]]
+then
+	echo "Certain files were not processed. Check input and run again."
+else
+	echo "All input files have been processed "
+fi
+
+echo
+	
+###################################################################
+# Logging
+
+echo "$THIS_JOB performed at `date` :: Subscript = $job_name :: Mode = $mode :: Inputs = $DIR_IN" >> $LOG_FILE
+
+############################################################################
+# End of script.
+# 
+echo $THIS_JOB " ended at " `date`; echo
+#

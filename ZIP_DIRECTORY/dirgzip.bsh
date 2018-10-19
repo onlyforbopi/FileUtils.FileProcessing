@@ -1,0 +1,17 @@
+#!/bin/bash
+
+
+
+if [[ -d $1 ]]; then
+    cd "$1"
+    cd ..
+    base=$(basename "$1")
+    tar -zcvf "$base.tar.gz" "$base"
+    if [[ $? == 0 && -f "$base.tar.gz" ]]; then
+        rm -rf "$base"
+    fi
+else
+    echo "Usage: $0 DIRECTORY";
+fi
+
+

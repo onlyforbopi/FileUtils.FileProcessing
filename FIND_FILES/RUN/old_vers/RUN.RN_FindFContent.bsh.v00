@@ -1,0 +1,217 @@
+#!/bin/bash
+
+#################################################################################################
+#                                                                                                                                                                                                                                                                                           ##
+#  Job:           RUN.RN_FindFContent.bsh
+#  Location:      /home/tede/n55115/Joblib/Utils/file_processing/FIND_FILES/RUN 
+#  
+#  Description:   -  RUNNABLE wrapper script.
+#                 -  Calls RN_FindFContent.bsh which:
+#                    Finds files' name in directory recursively
+#                    containing string in body (case (in)sensitive).
+#  
+#################################################################################################
+#  
+#  Usage:         RUN.RN_FindFContent.bsh  <parm_srch_dir>  <parm_srch_str>  <parm_file_out>  <case>
+#
+#  Parameters: 	<parm_srch_dir>   : Input directory.
+#              	<parm_srch_str>   : Search string.
+#				      <parm_file_out>   : Output file.
+#                 <case>            : Flag for case sensitive or unsensitive.
+#                                     Valid values: s or u respectively.
+#
+#
+#  Calls:         RN_FindFContent.bsh  parm_srch_dir  parm_srch_str  parm_file_out  parm_case
+#
+#  Parameters:    As above.
+#
+#
+#  Globals:       CASE_SENS   = "s"
+#                 CASE_UNSN   = "u"
+#
+#################################################################################################
+#
+#  Function:      -  Check for supplied parameters.
+#                 -  Call RN_FindFContent.bsh  parm_srch_dir  parm_srch_str  parm_file_out  parm_case
+#
+#  Output:        -  Output file <parm_file_out> in directory where job is runed.
+#                 -  Logs (outlist/errlist) in directory where job is runed.
+#
+#################################################################################################
+
+# Environment variables.
+# --> in .profile
+source $HOME"/.profile"
+
+# Parameters.
+declare        parm_srch_dir
+declare        parm_srch_str
+declare        parm_file_out
+declare        parm_case
+#
+
+# Constants.
+readonly       ARGS_NBR=4
+readonly       JOB_RUN="RN_FindFContent.bsh"
+#
+readonly       THIS_JOB_FULL=$0
+readonly       THIS_JOB_SMPL=${0##*/}
+readonly       JOB_OUT=$THIS_JOB_SMPL".outlist"
+readonly       JOB_ERR=$THIS_JOB_SMPL".errlist"
+#
+# Globals exported.
+declare -r -x  CASE_SENS="s"
+declare -r -x  CASE_UNSN="u"
+#
+
+# Variables
+declare        v_date
+
+# Functions.
+function chk_abnd_silent()
+{
+	# Checks return value of command.
+	# Called as:   chk_abnd_silent $?
+	# Notes:       Silent, does not print.
+	
+  local     abnd
+  
+  abnd=$1
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    sleep 1s
+    touch $JOB_OUT $JOB_ERR
+    exit $abnd
+  fi
+  
+  return 0
+}
+
+function chk_abnd()
+{
+	# Checks return value of command.
+	# Called as:   chk_abnd_silent $?
+	
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    sleep 1s
+    touch $JOB_OUT $JOB_ERR
+    exit $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+function house_keep()
+{
+   # Check number of command line parameters passed to script.
+   # Parse parameters.
+   #     Assign them to variables.
+   # Called as: house_keep $# $1 $2 ...
+  local     argc
+  
+  argc=$1
+  chk_abnd_silent $? # Check return status.
+  
+  # Check number of arguments.
+  if [ $argc -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $argc
+      echo "Must be = " $ARGS_NBR
+      echo "Usage: " $THIS_JOB_SMPL " <parm_srch_dir> <parm_srch_str> <parm_file_out> s|u"
+      exit 69
+  fi
+  
+  # Fill variables.
+  parm_srch_dir=$2
+  parm_srch_str=$3
+  parm_file_out=$4
+  parm_case=$5
+
+  chk_abnd_silent $? # Check return status.  
+  
+  # Check valid values for parm_case.
+  if [ $parm_case != $CASE_UNSN ] && [ $parm_case != $CASE_SENS ]; then
+     echo "Illegal 4th parameter = " $parm_case ' . Must be: ' $CASE_SENS ' or ' $CASE_UNSN ' .'
+     exit 68
+  fi
+  
+  return 0
+}
+
+############################################################################
+# Script start.
+#
+echo; echo $THIS_JOB_FULL " Started at ""$(date +"%Y-%m-%d %H:%M:%S::%N")"; echo
+echo $THIS_JOB_FULL " Started at ""$(date +"%Y-%m-%d %H:%M:%S::%N")" > $JOB_OUT; echo >> $JOB_OUT
+
+# Check arguments and construct file names.
+house_keep $# $1 $2 $3 $4
+chk_abnd_silent $? # Check return status.
+#
+
+############################################################################
+#  Run job.
+#
+
+# Assign date
+v_date=$(date)
+echo $v_date
+
+# Report on Job, outlist and errlist
+echo "Submit Job     " $JOB_RUN " ..."
+echo "outlist_name = " $JOB_OUT
+echo "errlist_name = " $JOB_ERR
+echo
+# Report on Job parameters
+echo "parm_srch_dir = @"$parm_srch_dir"@"
+echo "parm_srch_str = @"$parm_srch_str"@"
+echo "parm_file_out = @"$parm_file_out"@"
+echo "parm_case     = @"$parm_case"@"
+echo
+#
+# Report on Job, outlist, errlist in outlist
+echo $v_date >> $JOB_OUT
+echo "Submit Job     " $JOB_RUN " ..." >> $JOB_OUT
+echo "outlist_name = " $JOB_OUT        >> $JOB_OUT
+echo "errlist_name = " $JOB_ERR        >> $JOB_OUT
+echo >> $JOB_OUT
+# Report on Job parameters in outlist
+echo "parm_srch_dir = @"$parm_srch_dir"@" >> $JOB_OUT
+echo "parm_srch_str = @"$parm_srch_str"@" >> $JOB_OUT
+echo "parm_file_out = @"$parm_file_out"@" >> $JOB_OUT
+echo "parm_case     = @"$parm_case"@"     >> $JOB_OUT
+echo >> $JOB_OUT
+#
+# Call Job with the given parameters
+$JOB_RUN  $parm_srch_dir  $parm_srch_str  $parm_file_out  $parm_case \
+          1>>$JOB_OUT  2>$JOB_ERR
+#  Check return status.
+chk_abnd $?
+#
+
+############################################################################
+sleep 1s
+touch $JOB_OUT $JOB_ERR
+chk_abnd $? #  Check return status.
+
+############################################################################
+# Script end.
+#
+echo; echo >> $JOB_OUT; 
+echo $THIS_JOB_FULL " Ended at   ""$(date +"%Y-%m-%d %H:%M:%S::%N")"; echo
+echo $THIS_JOB_FULL " Ended at   ""$(date +"%Y-%m-%d %H:%M:%S::%N")" >> $JOB_OUT
+chk_abnd $? # Check return status.
+
+sleep 1s
+touch $JOB_OUT $JOB_ERR
+chk_abnd_silent $? # Check return status.
+#
+
+exit $?
+#

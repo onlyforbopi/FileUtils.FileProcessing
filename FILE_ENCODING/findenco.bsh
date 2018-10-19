@@ -1,0 +1,92 @@
+#!/bin/bash
+
+#########################################################
+#	Find Encoding    									#
+#   Detects encoding of file                     	    #	
+#   I/O : File / File.out                               #
+#														#
+#   Method : file -bi                                   #
+#   Input files are fed into for file -bi and the out,  #
+#   is stored into file                                 #
+#														#
+#	Usage : This script is called by the mother script: #
+#														#
+#########################################################
+
+
+#Constants
+readonly 	ARGS_NBR=2
+readonly 	THIS_JOB=${0##*/}
+
+#Variables
+declare 	FILE=$2
+declare 	pgm
+declare 	mode
+
+
+# Functions.
+function usage(){
+
+	echo "$THIS_JOB is called as : "
+	echo "$THIS_JOB <option> <filename>"; echo
+	echo "Possible options : "
+	echo "			"
+
+
+
+
+}
+
+
+
+function chk_abnd()
+{
+  local     abnd
+  
+  abnd=$1
+  date
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    #rm +++++++++++++
+    exit $abnd
+    #return $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+function chk_args()
+{
+  local        nbr_args=$1
+  
+  if [ $nbr_args -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $nbr_args
+      exit 69
+  else
+	 echo "User has supplied the correct number of arguments"
+     return 0
+  fi
+}
+
+
+##################################################################
+# Script Start
+echo $THIS_JOB " started at " `date`; echo
+
+echo "Checking number of arguments"
+chk_args $#
+
+case $1 in
+	-d) file -bi $FILE  	
+		;;
+	-l) iconv -l > "CHARACTERSETS.TXT"	
+		;;
+	-f) echo "File : $FILE : `file -bi $FILE | awk '{print $2}' | cut -c9-` " >> ENCOLIST.TXT
+		;;
+	*) 	echo " Incorrect option"; 
+		usage
+		exit 
+		;;
+esac
+
+

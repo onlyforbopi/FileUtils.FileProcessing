@@ -1,0 +1,126 @@
+#!/bin/bash
+
+# Environment variables.
+# --> in .profile
+
+# Set DD_files.
+export         FILE_IN
+export         FILE_OT
+
+# Constants.
+readonly       THIS_JOB=${0##*/}
+readonly       ARGS_NBR=2
+readonly       JOB_RUN="./FileCompare.prl"
+# readonly       JOB_PRF="./FileCompare"
+readonly       out_name=$JOB_RUN".out"
+readonly       err_name=$JOB_RUN".err"
+# readonly       JOB_SUF=$THIS_JOB".prl"
+# readonly       LST_SUF=$THIS_JOB".out"
+# readonly       ERR_SUF=$THIS_JOB".err"
+
+# Important variables.
+declare        step
+declare        pgm
+declare        pgm_full_path
+
+# # Functions.
+function chk_abnd()
+{
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    #rm +++++++++++++
+    exit $abnd
+    #return $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+# function constr_file_names()
+# {
+  # # Set DD_files.
+  # FILE_IN=$1
+  # FILE_OT=$2
+  # chk_abnd $? # Check return status.
+
+  # return 0
+# }
+
+# function constr_job_name()
+# {
+  # job_name=$JOB_PRF$JOB_SUF
+  # out_name=$JOB_PRF$LST_SUF
+  # err_name=$JOB_PRF$ERR_SUF
+  # chk_abnd $? # Check return status.
+
+  # return 0
+# }
+
+# function house_keep()
+# {
+  # local     argc
+  
+  # argc=$1
+  # chk_abnd $? # Check return status.
+  
+  # if [ $argc -ne $ARGS_NBR ]; then
+      # echo "Wrong number of parameters = " $argc
+      # echo "Must be = " $ARGS_NBR
+      # echo "Usage: " $THIS_JOB " <FILE_IN> <File_OT>"
+      # exit 69
+  # fi
+  
+  # constr_file_names $2 $3
+  # chk_abnd $? # Check return status.
+  # constr_job_name
+  # chk_abnd $? # Check return status.
+  
+  # return 0
+# }
+
+############################################################################
+# Script start.
+#
+echo $THIS_JOB " started at " `date`; echo
+
+# # Check arguments and construct file names.
+# house_keep $# $1 $2
+# chk_abnd $? # Check return status.
+# #
+
+# echo "FILE_IN = @"$FILE_IN"@"
+# echo "FILE_OT = @"$FILE_OT"@"
+
+############################################################################
+#  Run job.
+#
+date
+# echo "Submit Job " $job_name " ..."
+echo "Submit Job " $JOB_RUN " ..."
+echo "out_name = " $out_name
+echo "err_name = " $err_name
+# echo "FILE_IN  = " $FILE_IN
+# echo "FILE_OT  = " $FILE_OT
+echo "@" $1 "@" $2 "@"
+# $JOB_RUN 1>$out_name 2>$err_name
+$JOB_RUN $1 $2 1>$out_name 2>$err_name
+# $JOB_RUN $1 $2
+
+#  Check return status.
+chk_abnd $?
+
+# Unset DD_variables.
+# unset         FILE_IN  FILE_OT
+chk_abnd $?
+#
+
+############################################################################
+# End of script.
+# 
+echo $THIS_JOB " ended at " `date`; echo
+#

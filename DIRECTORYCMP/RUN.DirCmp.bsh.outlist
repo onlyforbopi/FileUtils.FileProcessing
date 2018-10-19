@@ -1,0 +1,38 @@
+/home/tede/n55115/Joblib/Utils/file_processing/DIRECTORYCMP/RUN.DirCmp.bsh  Started at 2016-11-21 14:43:22::082025153
+
+Mon Nov 21 14:43:22 EET 2016
+Submit Job      DirCmp.py  ...
+outlist_name =  RUN.DirCmp.bsh.outlist
+errlist_name =  RUN.DirCmp.bsh.errlist
+
+DIR_IN = @/home/tede/n55115/Joblib/Utils/file_processing/FILE_CLEANCHAR@
+p_rcrs = @@
+
+ 
+Script run at: 14:43:22
+Script run from: /home/tede/n55115/Joblib/Utils/file_processing/DIRECTORYCMP
+ 
+ 
+Comparing Files: 
+/home/tede/n55115/Joblib/Utils/file_processing/FILE_CLEANCHAR
+/home/tede/n55115/Joblib/Utils/file_processing/ZIP_UNZIP_MASS/RUN
+ 
+Comparing sizes: 
+Directory /home/tede/n55115/Joblib/Utils/file_processing/FILE_CLEANCHAR size: 52K
+Directory /home/tede/n55115/Joblib/Utils/file_processing/ZIP_UNZIP_MASS/RUN size: 28K
+
+Files only in /home/tede/n55115/Joblib/Utils/file_processing/FILE_CLEANCHAR:
+* RUN.CleanCharacters.bsh.LOG
+* RUN.CleanCharacters.bsh
+* RUN.DetectCharacters.bsh
+* RUN.DetectCharacters.bsh.LOG
+* detect.bsh
+* cleanchara.bsh
+
+Files only in /home/tede/n55115/Joblib/Utils/file_processing/ZIP_UNZIP_MASS/RUN:
+* RN_Zip_ALL_Rcrs.bsh
+* RN_UnZip_ALL_Rcrs.bsh
+* RUN.RN_UnZip_ALL_Rcrs.bsh
+* RUN.RN_Zip_ALL_Rcrs.bsh
+
+/home/tede/n55115/Joblib/Utils/file_processing/DIRECTORYCMP/RUN.DirCmp.bsh  Ended at   2016-11-21 14:43:22::109954289

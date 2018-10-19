@@ -1,0 +1,146 @@
+#!/bin/bash
+
+# Environment variables.
+# --> in .profile
+
+# DD_FILES
+# --> in RUN job.
+
+# Constants.
+readonly       THIS_JOB=${0##*/}
+readonly       ARRAY_INIT="#"
+
+# Important variables.
+declare        step
+declare        pgm
+declare        pgm_full_path
+
+declare -A     array    # array
+declare        line
+declare        srch
+declare        load
+declare        chek
+declare        fltr
+declare -i     line_cnt_fltr=0
+declare -i     line_cnt_base=0
+declare -i     line_cnt_xsty=0
+declare -i     line_cnt_xstn=0
+
+# Functions.
+function chk_abnd()
+{
+  local     abnd
+  
+  abnd=$1
+  date
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    #rm +++++++++++++
+    exit $abnd
+    #return $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+#
+
+#
+# Load FILE_IN_FLTR to table.
+#
+function file2table
+{
+  while IFS='' read -r line || [[ -n $line ]]; do
+    line_cnt_fltr=$line_cnt_fltr+1
+    
+    if [ $(expr $line_cnt_fltr % 100) -eq 0 ]; then
+       echo "line_cnt_fltr = @"$line_cnt_fltr"@"
+    fi
+   
+    load=${line:0:3}
+    array[$load]=$ARRAY_INIT
+  done  < $FILE_IN_FLTR
+}
+#
+
+############################################################################
+# Script start.
+#
+echo
+echo $THIS_JOB " started at " `date`; echo
+#
+
+if [ -f $FILE_OT_XSTY ]; then
+  echo "Deleting file " $FILE_OT_XSTY " ..."
+  rm $FILE_OT_XSTY
+  chk_abnd $? # Check return status.
+fi
+
+echo "Touching file " $FILE_OT_XSTY " ..."
+touch $FILE_OT_XSTY
+chk_abnd $? # Check return status.
+#
+
+if [ -f $FILE_OT_XSTN ]; then
+  echo "Deleting file " $FILE_OT_XSTN " ..."
+  rm $FILE_OT_XSTN
+  chk_abnd $? # Check return status.
+fi
+
+echo "Touching file " $FILE_OT_XSTN " ..."
+touch $FILE_OT_XSTN
+chk_abnd $? # Check return status.
+#
+
+echo "Loading table " `date` " ..."
+file2table
+echo "Loaded: @"$line_cnt_fltr"@ lines. " `date`
+
+echo "Array length:" ${#array[@]}; echo
+#
+
+############################################################################
+# Write to FILE_OT_XSTY records in both FILE_IN_BASE and FILE_IN_FLTR.
+#
+
+# Read FILE_IN_BASE by line.
+while IFS='' read -r line || [[ -n $line ]]; do
+  line_cnt_base=$line_cnt_base+1
+  
+  if [ $(expr $line_cnt_base % 100) -eq 0 ]; then
+    echo "line_cnt_base = @"$line_cnt_base"@"
+  fi
+  
+  srch="${line:139:3}"
+  chek=${array["$srch"]}
+  
+  if [[ "$chek" == "$ARRAY_INIT" ]]; then
+     echo "$line" >> $FILE_OT_XSTY
+     line_cnt_xsty=$line_cnt_xsty+1
+     
+     if [ $(expr $line_cnt_xsty % 100) -eq 0 ]; then
+       echo "line_cnt_xsty = @"$line_cnt_xsty"@"
+     fi
+  else
+     if [ $(expr $line_cnt_xstn % 100) -eq 0 ]; then
+       echo "line_cnt_xsty = @"$line_cnt_xstn"@"
+     fi
+     
+     echo "$line" >> $FILE_OT_XSTN
+     line_cnt_xstn=$line_cnt_xstn+1
+  fi
+done  < $FILE_IN_BASE
+#
+
+############################################################################
+# End of script.
+# 
+echo
+echo "Ended."
+echo "Read : line_cnt_fltr = @"$line_cnt_fltr"@"
+echo "Read : line_cnt_base = @"$line_cnt_base"@"
+echo "Same : line_cnt_xsty = @"$line_cnt_xsty"@"
+echo "Diff : line_cnt_xstn = @"$line_cnt_xstn"@"
+echo
+
+echo $THIS_JOB " ended at " `date`; echo
+#

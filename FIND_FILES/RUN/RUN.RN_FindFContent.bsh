@@ -1,0 +1,235 @@
+#!/bin/bash
+
+#################################################################################################
+#                                                                                                                                                                                                                                                                                           ##
+#  Job:           RUN.RN_FindFContent.bsh
+#  Location:      /home/tede/n55115/Joblib/Utils/file_processing/FIND_FILES/RUN 
+#  
+#  Description:   -  RUNNABLE wrapper script.
+#                 -  Calls RN_FindFContent.bsh which:
+#                    Finds files' name in directory (recursively or not)
+#                    containing string in body (case (in)sensitive).
+#  
+#################################################################################################
+#  
+#  Usage:         RUN.RN_FindFContent.bsh  <srch_dir>  <srch_str>  <file_out>  <case>  <rcrs>
+#
+#  Parameters: 	<srch_dir>     : Input directory.
+#              	<srch_str>     : Search string.
+#				      <file_out>     : Output file.
+#                 <case>         : Flag for case sensitive or insensitive.
+#                                  Valid values: s or i respectively.
+#                 <rcrs>         : Flag for recursive process or not.
+#                                  Valid values: r or n respectively.
+#
+#
+#  Calls:         RN_FindFContent.bsh  <srch_dir>  <srch_str>  <file_out>  <case>  <rcrs>
+#
+#  Parameters:    As above.
+#
+#
+#  Globals:       CASE_SENS      = "s"
+#                 CASE_INSN      = "i"
+#  
+#                 RCRS_YES       = "r"
+#                 RCRS_NOT       = "n"
+#
+#################################################################################################
+#
+#  Function:      -  Check for supplied parameters.
+#                 -  Call RN_FindFContent.bsh  <srch_dir>  <srch_str>  <file_out>  <case>  <rcrs>
+#
+#  Output:        -  Output file <file_out> in directory where job is runed.
+#                 -  Logs (outlist/errlist) in directory where job is runed.
+#
+#################################################################################################
+
+# Environment variables.
+# --> in .profile
+source $HOME"/.profile"
+
+# Parameters.
+declare        p_srch_dir
+declare        p_srch_str
+declare        p_file_out
+declare        p_case
+declare        p_rcrs
+#
+
+# Constants.
+readonly       ARGS_NBR=5
+readonly       JOB_RUN="RN_FindFContent.bsh"
+#
+readonly       THIS_JOB_FULL=$0
+readonly       THIS_JOB_SMPL=${0##*/}
+readonly       JOB_OUT=$THIS_JOB_SMPL".outlist"
+readonly       JOB_ERR=$THIS_JOB_SMPL".errlist"
+#
+# Globals exported.
+declare -r -x  CASE_SENS="s"
+declare -r -x  CASE_INSN="i"
+#
+declare -r -x  RCRS_YES="r"
+declare -r -x  RCRS_NOT="n"
+#
+
+# Variables
+declare        v_date
+
+# Functions.
+function chk_abnd_silent()
+{
+	# Checks return value of command.
+	# Called as:   chk_abnd_silent $?
+	# Notes:       Silent, does not print.
+	
+  local     abnd
+  
+  abnd=$1
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    sleep 1s
+    touch $JOB_OUT $JOB_ERR
+    exit $abnd
+  fi
+  
+  return 0
+}
+
+function chk_abnd()
+{
+	# Checks return value of command.
+	# Called as:   chk_abnd $?
+	
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    sleep 1s
+    touch $JOB_OUT $JOB_ERR
+    exit $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+function house_keep()
+{
+   # Check number of command line parameters passed to script.
+   # Parse parameters.
+   #     Assign them to variables.
+   # Called as: house_keep $# $1 $2 ...
+  local     argc
+  
+  argc=$1
+  chk_abnd_silent $? # Check return status.
+  
+  # Check number of arguments.
+  if [ $argc -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $argc
+      echo "Must be = " $ARGS_NBR
+      echo "Usage: " $THIS_JOB_SMPL " <srch_dir> <srch_str> <file_out> s|i r|n"
+      exit 69
+  fi
+  
+  # Fill variables.
+  p_srch_dir=$2
+  p_srch_str=$3
+  p_file_out=$4
+  p_case=$5
+  p_rcrs=$6
+
+  chk_abnd_silent $? # Check return status.  
+  
+  # Check valid values for p_case.
+  if [ $p_case != $CASE_INSN ] && [ $p_case != $CASE_SENS ]; then
+     echo "Illegal 4th parameter = " $p_case ' . Must be: ' $CASE_SENS ' or ' $CASE_INSN ' .'
+     exit 68
+  fi
+  
+  # Check valid values for p_rcrs.
+  if [ $p_rcrs != $RCRS_YES ] && [ $p_rcrs != $RCRS_NOT ]; then
+     echo "Illegal 5th parameter = " $p_rcrs ' . Must be: ' $RCRS_YES ' or ' $RCRS_NOT ' .'
+     exit 67
+  fi
+  
+  return 0
+}
+
+############################################################################
+# Script start.
+#
+echo; echo $THIS_JOB_FULL " Started at ""$(date +"%Y-%m-%d %H:%M:%S::%N")"; echo
+echo $THIS_JOB_FULL " Started at ""$(date +"%Y-%m-%d %H:%M:%S::%N")" > $JOB_OUT; echo >> $JOB_OUT
+
+# Check arguments and construct file names.
+house_keep $# $1 $2 $3 $4 $5
+chk_abnd_silent $? # Check return status.
+#
+
+############################################################################
+#  Run job.
+#
+
+# Assign date
+v_date=$(date)
+echo $v_date
+
+# Report on Job, outlist and errlist
+echo "Submit Job     " $JOB_RUN " ..."
+echo "outlist_name = " $JOB_OUT
+echo "errlist_name = " $JOB_ERR
+echo
+# Report on Job parameters
+echo "p_srch_dir = @"$p_srch_dir"@"
+echo "p_srch_str = @"$p_srch_str"@"
+echo "p_file_out = @"$p_file_out"@"
+echo "p_case     = @"$p_case"@"
+echo "p_rcrs     = @"$p_rcrs"@"
+echo
+#
+# Report on Job, outlist, errlist in outlist
+echo $v_date >> $JOB_OUT
+echo "Submit Job     " $JOB_RUN " ..." >> $JOB_OUT
+echo "outlist_name = " $JOB_OUT        >> $JOB_OUT
+echo "errlist_name = " $JOB_ERR        >> $JOB_OUT
+echo >> $JOB_OUT
+# Report on Job parameters in outlist
+echo "p_srch_dir = @"$p_srch_dir"@" >> $JOB_OUT
+echo "p_srch_str = @"$p_srch_str"@" >> $JOB_OUT
+echo "p_file_out = @"$p_file_out"@" >> $JOB_OUT
+echo "p_case     = @"$p_case"@"     >> $JOB_OUT
+echo "p_rcrs     = @"$p_rcrs"@"     >> $JOB_OUT
+echo >> $JOB_OUT
+#
+# Call Job with the given parameters
+$JOB_RUN  $p_srch_dir  $p_srch_str  $p_file_out  $p_case  $p_rcrs \
+          1>>$JOB_OUT  2>$JOB_ERR
+#  Check return status.
+chk_abnd $?
+#
+
+############################################################################
+sleep 1s
+touch $JOB_OUT $JOB_ERR
+chk_abnd $? #  Check return status.
+
+############################################################################
+# Script end.
+#
+echo; echo >> $JOB_OUT; 
+echo $THIS_JOB_FULL " Ended at   ""$(date +"%Y-%m-%d %H:%M:%S::%N")"; echo
+echo $THIS_JOB_FULL " Ended at   ""$(date +"%Y-%m-%d %H:%M:%S::%N")" >> $JOB_OUT
+chk_abnd $? # Check return status.
+
+sleep 1s
+touch $JOB_OUT $JOB_ERR
+chk_abnd_silent $? # Check return status.
+#
+
+exit $?
+#

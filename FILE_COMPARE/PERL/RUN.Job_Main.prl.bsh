@@ -1,0 +1,112 @@
+#!/bin/bash
+
+# Environment variables.
+# --> in .profile
+
+# Set DD_files.
+export         FILE_IN_FLTR
+export         FILE_IN_BASE
+
+# Constants.
+readonly       THIS_JOB=${0##*/}
+readonly       ARGS_NBR=2
+#
+readonly       JOB_RUN="./Job_Main.prl"
+readonly       OUT_NAME=$JOB_RUN".out"
+readonly       ERR_NAME=$JOB_RUN".err"
+
+# Important variables.
+declare        step
+declare        pgm
+declare        pgm_full_path
+
+# # Functions.
+function chk_abnd()
+{
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    #rm +++++++++++++
+    exit $abnd
+    #return $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+function constr_file_names()
+{
+  # Set DD_files.
+  FILE_IN_FLTR=$1
+  chk_abnd $? # Check return status.
+  FILE_IN_BASE=$2
+  chk_abnd $? # Check return status.
+
+  return 0
+}
+
+function house_keep()
+{
+  local     argc
+  
+  argc=$1
+  chk_abnd $? # Check return status.
+  
+  if [ $argc -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $argc
+      echo "Must be = " $ARGS_NBR
+      echo "Usage: " $THIS_JOB " <FILE_IN_FLTR> <FILE_IN_BASE>"
+      exit 69
+  fi
+  
+  constr_file_names $2 $3
+  chk_abnd $? # Check return status.
+  
+  return 0
+}
+
+############################################################################
+# Script start.
+#
+echo $THIS_JOB " started at " `date`; echo
+
+# Check arguments and construct file names.
+house_keep $# $1 $2
+chk_abnd $? # Check return status.
+#
+
+echo "FILE_IN_FLTR = @"$FILE_IN_FLTR"@"
+echo "FILE_IN_BASE = @"$FILE_IN_BASE"@"
+
+############################################################################
+#  Run job.
+#
+date
+echo "Submit Job " $JOB_RUN " ..."
+echo "OUT_NAME = " $OUT_NAME
+echo "ERR_NAME = " $ERR_NAME
+echo "FILE_IN_FLTR  = " $FILE_IN_FLTR
+echo "FILE_IN_BASE  = " $FILE_IN_BASE
+$JOB_RUN  $FILE_IN_FLTR  $FILE_IN_BASE  1>$OUT_NAME  2>$ERR_NAME
+
+#  Check return status.
+chk_abnd $?
+
+# Unset DD_variables.
+unset         FILE_IN_FLTR  FILE_IN_BASE
+chk_abnd $?
+#
+
+sleep 1s
+touch $OUT_NAME  $ERR_NAME
+#
+
+############################################################################
+# End of script.
+# 
+echo $THIS_JOB " ended at " `date`; echo
+#

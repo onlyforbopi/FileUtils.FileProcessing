@@ -1,0 +1,44 @@
+ch_encoding.bsh  started at  Mon Nov 14 15:11:23 EET 2016
+
+Checking number of arguments
+User has supplied the correct number of arguments
+File : /home/tede/n55115/PD/TOSORT/pdtest/asdasd.txt is us-ascii \n
+File : /home/tede/n55115/PD/TOSORT/pdtest/asdasd.txt is us-ascii : Does not convert \n
+ 
+ch_encoding.bsh  ended at  Mon Nov 14 15:11:23 EET 2016
+
+ch_encoding.bsh  started at  Mon Nov 14 15:11:23 EET 2016
+
+Checking number of arguments
+User has supplied the correct number of arguments
+File : /home/tede/n55115/PD/TOSORT/pdtest/callscript2.bsh is us-ascii \n
+File : /home/tede/n55115/PD/TOSORT/pdtest/callscript2.bsh is us-ascii : Does not convert \n
+ 
+ch_encoding.bsh  ended at  Mon Nov 14 15:11:23 EET 2016
+
+ch_encoding.bsh  started at  Mon Nov 14 15:11:23 EET 2016
+
+Checking number of arguments
+User has supplied the correct number of arguments
+File : /home/tede/n55115/PD/TOSORT/pdtest/catoutput.txt is us-ascii \n
+File : /home/tede/n55115/PD/TOSORT/pdtest/catoutput.txt is us-ascii : Does not convert \n
+ 
+ch_encoding.bsh  ended at  Mon Nov 14 15:11:23 EET 2016
+
+ch_encoding.bsh  started at  Mon Nov 14 15:11:23 EET 2016
+
+Checking number of arguments
+User has supplied the correct number of arguments
+File : /home/tede/n55115/PD/TOSORT/pdtest/findfull.save is us-ascii \n
+File : /home/tede/n55115/PD/TOSORT/pdtest/findfull.save is us-ascii : Does not convert \n
+ 
+ch_encoding.bsh  ended at  Mon Nov 14 15:11:23 EET 2016
+
+ch_encoding.bsh  started at  Mon Nov 14 15:11:23 EET 2016
+
+Checking number of arguments
+User has supplied the correct number of arguments
+File : /home/tede/n55115/PD/TOSORT/pdtest/getscrdir.bsh is utf-8 \n
+ 
+ch_encoding.bsh  ended at  Mon Nov 14 15:11:23 EET 2016
+

@@ -1,0 +1,312 @@
+#!/bin/bash
+
+##############################################################################
+# Find Encoding  										                     #
+# Called as RUN.FileEncoding.bsh										     #
+#																			 #
+# Function : Script will cleanup values on given file or directory 		     #
+#																			 #
+#	1. Detect Encoding                                               		 #                
+#   2. List Known Character Sets									         #                                            
+#   3. Output into file										                 #                                                						 #                               
+#   Q. Exit                                                                  #
+#                                                                            #         
+#	Notes : Placed in PATH, can be ran from anywhere.                        #
+#   Notes : Edit fenco.bsh if there's need for a different change            #
+# 	                                                                         #
+#	Input  : File or Directory (Directory needs a trailing /)                #
+#	Output : Output files are stored in the same directory as origin files   #
+#	RunLogs: .err/.out are located wherever the script is called             #
+#																			 #
+##############################################################################
+
+
+
+
+
+##############################################################################
+
+
+
+##############################################
+# I/O 
+export DIR_IN
+
+##############################################
+#Constants
+readonly 		ARGS_NBR=1
+readonly 		THIS_JOB=${0##*/}
+readonly        JOB_PRF="findenco"
+readonly       	JOB_SUF=".bsh"
+readonly      	LST_SUF=".out"
+readonly       	ERR_SUF=".err"
+readonly       	THIS_JOB=${0##*/}
+readonly       	LOG_FILE="/home/tede/n55115/Joblib/Utils/file_processing/FILE_CLEANCHAR/$THIS_JOB.LOG"
+#Variables
+declare 	FILE=$1
+declare     FILE_ENC
+declare     DEST_ENC="utf-8"
+declare 	pgm
+declare 	mode
+declare     step
+declare     DIR_IN
+
+
+function menu(){
+
+	# Clear Screen
+	clear
+
+	# Display Menu
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	echo "@ Detect Encoding v.1                                                                   @"
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	echo "@                                                                                       @"
+	echo "@	1. Detect Encoding                                                                    @"
+	echo "@	2. List all known Character sets                                                      @"
+	echo "@	3. Detect Encoding - File output                                                      @"
+	echo "@	Q. Exit                                                                               @"
+	echo "@                                                                                       @"
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	echo 
+
+	# Display Prompt
+	echo -n "Enter choice : "; read choice
+
+	# Assign value to pgm
+	case $choice in
+		1)  pgm='-d'	
+			operation='Detect File Encoding - Screen output' 
+			;;
+		2) 	pgm='-l'
+			operation='List all known character sets' 
+			;;
+		3) 	pgm='-f'
+			operation='Detect File Encoding - File output' 
+			;;
+		4)  exit; 
+			;;
+		*)  pmg='error'
+			usage
+			echo "Wrong choice, exiting script.";
+			exit
+			;;
+	esac
+	
+	# Clear screen again
+	clear
+	
+	# DEBUG
+	# echo " \$pgm : $pgm ";
+	# echo " \$operation : $operation ";
+	# read
+
+}
+
+
+# Functions.
+function chk_abnd()
+{
+  local     abnd
+  
+  abnd=$1
+  date
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    #rm +++++++++++++
+    exit $abnd
+    #return $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+
+function constr_file_names()
+{
+  # Set DD_files names.
+  
+  DIR_IN=$1
+  chk_abnd $? # Check return status.
+
+  return 0
+}
+
+function get_script_dir () {																															
+     SOURCE="${BASH_SOURCE[0]}"																												
+     while [ -h "$SOURCE" ]; do
+          DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+          SOURCE="$( readlink "$SOURCE" )"
+          
+          [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+     done
+     DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+     echo "$DIR"
+}	
+
+function constr_job_name()
+{
+  job_name=$JOB_PRF$JOB_SUF
+  out_name=$JOB_PRF$LST_SUF
+  err_name=$JOB_PRF$ERR_SUF
+  chk_abnd $? # Check return status.
+
+  return 0
+}
+
+function set_mode()
+{
+	if [ -d $DIR_IN ]
+	then
+		mode="Directory"
+	else 
+	
+		if [ -e $DIR_IN ]
+		then
+			mode="Single_File"
+		else
+			echo "Invalid Input, Parameter is neither a file or directory"
+			exit 69
+		fi
+	fi		
+}
+
+function chk_args()
+{
+  local        nbr_args=$1
+  
+  if [ $nbr_args -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $nbr_args
+      exit 69
+  else
+	 echo "User has supplied the correct number of arguments"
+     return 0
+  fi
+}
+
+function checkfileexist()
+{
+	FILETEST=$1
+	if [ -f $FILETEST ]; then
+		echo "File $FILETEST Exists"; echo "Proceeding..."; echo
+	elif [ -d $FILETEST ]; then
+		echo "Directory $FILETEST Exists"; echo "Proceeding..."; echo
+	else
+		echo "The File $FILE Does Not Exist"; echo
+		exit 
+fi
+}
+
+function removeoldrunfiles()
+{
+	outfile=$1
+	errfile=$2
+	rm $outfile
+	rm $errfile	
+}
+
+
+
+##################################################################
+# Script Start
+echo $THIS_JOB " started at " `date`; echo
+
+# Call menu
+menu
+
+echo "Checking number of arguments"
+chk_args $#
+chk_abnd $?
+echo "--"; echo
+
+# Construct file names
+echo "Constructing File names..."; 
+constr_file_names $1
+echo "--"; echo
+
+# Call Job .
+echo "Constructing Job name..."
+constr_job_name
+echo "--"; echo
+
+# Remove old run files
+removeoldrunfiles $out_name $err_name
+
+
+#Set mode
+echo "Setting script mode"
+set_mode
+chk_abnd $?
+echo "--"; echo
+
+# Check if files / directories exist
+checkfileexist $1
+
+# Printing job names
+echo "Submit Job " $job_name " ..."
+echo "out_name = " $out_name
+echo "err_name = " $err_name	
+echo "--"; echo
+
+# Printing script mode	
+echo "Script will run on mode : $mode : ";
+echo "Script will perform operation : $operation "; 
+echo "Script will be performed on $1"; echo	 
+echo "--"; echo
+
+
+case $mode in
+	
+	
+# Single File Input
+		Single_File) 
+		echo $DIR_IN
+			
+			noffiles=1
+			counter=1
+			$job_name $pgm $DIR_IN 1>$out_name 2>$err_name
+			chk_abnd $?
+		;;
+		
+		
+# Multiple File Input
+		Directory)
+		
+		echo "Performing job on directory $DIR_IN"
+		echo "Output directory in $(get_script_dir $0)"; 
+		
+		#Count files in directory
+		noffiles=$(($(ls -l $DIR_IN | wc -l ) - 1))
+		echo "Directory $DIR_IN contains $noffiles files"; echo "--"; echo
+		
+		
+		for FILE in $DIR_IN*.*	
+		do
+			counter=$(($counter +1 ))
+			echo "Performing job on file : $FILE"
+		
+			$job_name $pgm $FILE 1>>$out_name 2>>$err_name
+			chk_abnd $?
+		
+		done
+		;;
+	esac
+
+echo "--"	
+
+
+
+# Find encoding of file, store it into FILE_ENC
+file -i $FILE > FILE.ot
+
+FILE_ENC=`file -bi $FILE | awk '{print $2}' | cut -c9-`
+echo " File : $FILE is $FILE_ENC \n"
+
+
+
+
+	
+##############################################################
+# Script end
+echo $THIS_JOB " ended at " `date`; echo
+#

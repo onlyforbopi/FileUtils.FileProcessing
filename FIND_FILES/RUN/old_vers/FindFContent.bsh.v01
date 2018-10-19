@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# Search for string in FileNames'.
+
+# Important variables.
+declare        parm_srch_str
+declare        parm_file_out
+
+# Constants.
+readonly       ARGS_NBR=2
+
+# Functions.
+function chk_abnd()
+{
+  local     abnd
+  
+  abnd=$1
+  # date
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    #rm +++++++++++++
+    exit $abnd
+    #return $abnd
+  # else
+    # echo "Done"; echo
+  fi
+}
+
+function chk_args()
+{
+  local        nbr_args=$1
+  
+  if [ $nbr_args -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $nbr_args
+      echo "Usage: " $this_job " <parm_srch_str> <parm_file_out>"
+      exit 69
+  else
+     parm_srch_str=$2
+     parm_file_out=$3
+     return 0
+  fi
+}
+
+# Script start.
+this_job=${0##*/}
+
+# Check arguments
+chk_args $# $1 $2
+chk_abnd $? # Check return status.
+echo "parm_srch_str = @"$parm_srch_str"@"
+echo "parm_file_out = @"$parm_file_out"@"
+
+# Do work.
+find . -type f -print0 | xargs -0 grep -l $parm_srch_str > $parm_file_out
+
+############################################################################
+# End of script.
+# 

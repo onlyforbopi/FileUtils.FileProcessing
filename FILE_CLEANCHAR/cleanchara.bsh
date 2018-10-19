@@ -1,0 +1,280 @@
+#!/bin/bash
+
+#################################################################################################
+#                                                                                                                                                                                                                                                                                           ##
+#  Job: detect.bsh
+#  Location: /home/tede/n55115/Joblib/Utils/file_processing/FILE_CLEANCHAR
+#  
+#  Called by: RUN.DetectCharacters.bsh <dir|singlefile> 
+#  Parameters: <dir> : Input directory or single file
+
+#
+#  Uses global variables: DIR_IN
+#
+#################################################################################################
+#
+#  Function: (Note: doc_ functions just for documentation, not real code)
+#
+#  {
+#     #  Check for supplied parameters.
+#     house_keep()
+#
+#     #  STEP0001:
+#        #  Parse command line option
+#        Command line option = doc_pass_cmo()
+#
+#           # Create output file name.
+#           file_out = doc_create_file_out_name()
+#
+#           # Process file_out.
+#           doc_process_file(file_out)
+#        end
+#  }
+#  ______________________________________________________________________________________________
+#
+#  doc_pass_cmo()
+#  {
+#     	Parse command line option 
+#		from mother script and update variables
+#  }
+#  ______________________________________________________________________________________________
+#
+#  doc_create_file_out_name()
+#  {
+#     Create file_out name by adding a prefix or/and suffix to file_in name,
+#     without full path.
+#  }
+#  ______________________________________________________________________________________________
+#
+#  doc_process_file(file_out)
+#  {
+#     	Apply command, program or job on file_in.
+#     	Write file_out.
+#		Uses sed to detect specific sets of characters and replace them
+#  }
+#
+#################################################################################################
+#
+#  Output: 	Output files in directory <dir>.
+#			Output file form : .clnd
+# 			Special characters will be replaced by blank space
+#
+#################################################################################################
+#
+#  Method : Awk with pattern matching                 
+# 			Input files are scanned for Specific Hex values,   
+# 			if any are found awk replaces the special characters with spaces                         
+#
+###################################################################################################!/bin/bash
+
+#########################################################
+#	Clean file											#
+#   Null / Non printable / Extended Ascii				#	
+#   Hex substitution - Add methods for Octal			#
+#########################################################
+
+
+#Constants
+readonly 	ARGS_NBR=2
+readonly 	THIS_JOB=${0##*/}
+
+#Variables
+declare 	FILE=$2
+declare 	pgm
+declare 	mode
+
+
+# Functions.
+function chk_abnd()
+{
+	# Checks return value
+	# Called as chk_abnd $?
+	
+  local     abnd
+  
+  abnd=$1
+  date
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    #rm +++++++++++++
+    exit $abnd
+    #return $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+function chk_args()
+{
+	# Checks number of args
+	# Called as chk_args $# $1 $2 ...
+
+  local        nbr_args=$1
+  
+  if [ $nbr_args -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $nbr_args
+      exit 69
+  else
+	 echo "User has supplied the correct number of arguments"
+	 echo
+     return 0
+  fi
+}
+
+
+function filesize()
+{
+	# Calculate File size
+	# Prints to screen / file
+	# Called as filesize(file)
+	
+	FILETOSIZE=$1
+	echo "File : $FILETOSIZE is `du -h "$FILETOSIZE" | cut -f1` "
+	echo "File : $FILETOSIZE is `wc -l "$FILETOSIZE" | awk '{print $1}' ` lines "
+	echo
+}
+
+function checkfileexistin()
+{
+	# Check for file existence
+	# Prints to screen
+	# Called as checkfileexistin(filename)
+
+	FILETEST=$1
+	if [ -f $FILETEST ]; then
+		echo "File '$FILETEST' Exists"; echo "Proceeding..."; echo
+	elif [ -d $FILETEST ]; then
+		echo "Directory '$FILETEST' Exists"; echo "Proceeding..."; echo
+	else
+		echo "The File '$FILE' Does Not Exist"; echo
+		exit 
+fi
+}
+
+##################################################################
+# Script Start
+echo "@@@@@@@@@@@@@"
+echo $THIS_JOB " started at " `date`; echo
+
+echo "Checking number of arguments"
+chk_args $#
+
+
+
+# Do work - Uncomment op you need
+# Cleanup null values - Replace with Space	
+mode=Replacenull
+echo "Mode set to : $mode"
+echo "Performing operation ..."; echo
+
+# Check if file exists
+checkfileexistin $2
+
+# Get file sizing
+filesize $FILE 
+
+# Parse command line parameters
+case $1 in
+		
+		# Use sed to find replace
+	-n) sed 's/\x00/\x20/g' $FILE > "$FILE.clnd"
+		;;
+	-a) sed 's/[\x80-\xFF]/\x20/g' $FILE > "$FILE.clnd"
+		;;
+	-p) sed 's/[\x00-\x1F]/\x20/g' $FILE > "$FILE.clnd"
+		;;
+	-b) sed 's/[\x00-\x1F\x80-\xFF]/\x20/g' $FILE > "$FILE.clnd"
+		;;
+	-e) sed 's/[\x00-\x1F\x80-\xBF]/\x20/g' $FILE > "$FILE.clnd"
+		;;
+	-k) sed \
+	    -e 's/\x00/\x20/g' \
+        -e 's/\xAB/\x20/g' \
+        -e 's/\xAC/\x20/g' \
+        -e 's/\xAF/\x20/g' \
+	    -e 's/\xA1/\x20/g' \
+	    -e 's/\xA2/\x20/g' \
+	    -e 's/\xA6/\x20/g' \
+	    -e 's/\xA7/\x20/g' \
+	    -e 's/\xA8/\x20/g' \
+	    -e 's/\xABB/\x20/g' \
+	    -e 's/\xAB4/\x20/g' \
+	    -e 's/\xAC0/\x20/g' \
+        -e 's/[\x80-\xFF]/\x20/g' \
+        -e 's/\x46/\x20/g' $FILE > "$FILE.clnd"
+		;;
+	 *) 
+		echo " Incorrect option"; 
+		
+		exit 
+		;;
+esac
+		
+##########
+	
+#{# LINUX
+# THESE WORK ON LINUX SERVER
+# sed -e 's/\x00/\x20/g;s/\xB0/\x20/g' $FILE > $FILE.clnd
+# sed -e 's/\x20/\x40/g' $FILE > $FILE.clnd
+# tr '\x00' '\x20' <$FILE >"$FILE.clnd"
+#} chk_abnd $?
+	
+	# sed \
+	# -e 's/\x00/\x20/g' \
+    # -e 's/\xAB/\x20/g' \
+    # -e 's/\xAC/\x20/g' \
+    # -e 's/\xAF/\x20/g' \
+	# -e 's/\xA1/\x20/g' \
+	# -e 's/\xA2/\x20/g' \
+	# -e 's/\xA6/\x20/g' \
+	# -e 's/\xA7/\x20/g' \
+	# -e 's/\xA8/\x20/g' \
+	# -e 's/\xABB/\x20/g' \
+	# -e 's/\xAB4/\x20/g' \
+	# -e 's/\xAC0/\x20/g' \
+    # -e 's/[\x80-\xFF]/\x20/g' \
+    # -e 's/\x46/\x20/g' $FILE > "$FILE.clnd"
+	# chk_abnd $?
+	
+	
+##########
+## LOCALHOST
+# THIS WORKS ON LOCALHOST
+# tr '\x00' '\x20' <$FILE >"$FILE.clnd"
+# perl -pe 's/\000/ /g' $FILE > "$FILE.clnd"
+# Perl for multiple
+# perl -pe 's/\101/ /g;s/ /\102/g' testsed.txt
+#
+# THIS WORKS ON LOCALHOST BUT NOT FOR NULL X00
+# sed -e $'s/\x20/\x53/g' $FILE > $FILE.clnd
+# chk_abnd $?
+#
+# THIS WORKS ON LOCALHOST - MULTIPLE SHIFTS
+# sed -e $'s/\x20/\x45/g;s/\x45/\x46/g' ...
+	
+	
+	
+	echo
+	
+# Cleanup extended ascii (non printable) range
+	
+	#mode=Replacenonprint
+	#echo "Mode set to : $mode"
+	#sed -i.bak $'s/[\x80-\xFF]/\x20/g' $FILE > "$FILE.clnd"
+
+# Cleanup control characters, null and non printable
+	
+	#mode=Replacecontrolc
+	# echo "Mode set to : $mode"
+	# sed -i.bak $'s/[\x00-\x1F]/\x20/g;s/[\x80-\xFF]/\x20/g' $FILE > "FILE.clnd"
+	
+	
+# Readd CR
+#unix2dos $FILE.clnd	
+
+	
+##############################################################
+# Script end
+echo $THIS_JOB " ended at " `date`; echo
+#
+	

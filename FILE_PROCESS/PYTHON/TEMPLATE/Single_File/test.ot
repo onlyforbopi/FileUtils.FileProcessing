@@ -1,0 +1,65 @@
+#use strict;
+#use warnings;
+use autodie;
+
+my $f2 = shift || "CSP8216.TXT";											
+my $f1 = shift || "CSP1111.TXT";											
+
+open my $fh1, '>', 'file1';
+open my $fh2, '>', 'file2';
+# open fh2, '>', 'file2';
+
+my $arrayinit = "X";
+my %results;
+my $srch;
+my $chek;
+																
+open my $file1, '<', $f1;													
+while (my $line = <$file1>) 
+{
+	my $load = substr($line, 0, 12);
+	$results{$load}++
+	# my $results{$load} = $arrayinit;
+	# $results{$load} = "$arrayinit";
+}							
+
+open my $file2, '<', $f2;													
+while (my $line = <$file2>) 
+{
+	# Value to search for, e.g. [0..29]
+	my $srch = substr($line, 0, 12);
+	# my $srch = "substr($line, 0, 30)"; # ?mOno gia to an uparxoun kena sthn arxg h sto telos?
+	# chek = results[0..29]
+	my $chek = $results{$srch};
+	# my $chek = "$results{$srch}";
+	
+	if ($chek >= 1) # string compare.
+	{
+	print {$fh1} $line;
+	}
+	else
+	{
+	# print fh2 "$line";
+	# print fh2 $line;
+	print {$fh2} $line;
+	}
+}							
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

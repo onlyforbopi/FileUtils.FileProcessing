@@ -1,0 +1,1063 @@
+<?xml version="1.0" encoding="WINDOWS-1253"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook
+ xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:s="urn:schemas-microsoft-com:office:spreadsheet">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <LastAuthor>dsLib</LastAuthor>
+  <Created>2011-03-17T10:10:24Z</Created>
+  <Version>11.9999</Version>
+ </DocumentProperties>
+ <Styles>
+  <Style s:ID="Default" s:Name="Normal">
+   <Alignment s:Vertical="Center" s:WrapText="1"/>
+   <Borders/>
+   <Font x:CharSet="161"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style s:ID="bold">
+   <Font x:CharSet="161" s:Bold="1"/>
+  </Style>
+  <Style s:ID="amount">
+   <Alignment s:Horizontal="Right" s:Vertical="Center" s:WrapText="1"/>
+   <NumberFormat s:Format="#,##0.00"/>
+  </Style>
+  <Style s:ID="amount_u" s:Parent="amount">
+   <Borders><Border s:Position="Top" s:LineStyle="Continuous" s:Weight="1"/></Borders>
+  </Style>
+  <Style s:ID="amount_ub" s:Parent="amount_u">
+   <Font x:CharSet="161" s:Bold="1"/>
+  </Style>
+  <Style s:ID="count">
+   <Alignment s:Horizontal="Right" s:Vertical="Center" s:WrapText="1"/>
+   <NumberFormat s:Format="#,##0"/>
+  </Style>
+  <Style s:ID="count_u" s:Parent="count">
+   <Borders><Border s:Position="Top" s:LineStyle="Continuous" s:Weight="1"/></Borders>
+  </Style>
+  <Style s:ID="count_ub" s:Parent="count_u">
+   <Font x:CharSet="161" s:Bold="1"/>
+  </Style>
+  <Style s:ID="free">
+   <Alignment s:Horizontal="Left" s:Vertical="Center" s:WrapText="0"/>
+   <Font x:CharSet="161" s:Bold="1"/>
+  </Style>
+  <Style s:ID="left">
+   <Alignment s:Horizontal="Left" s:Vertical="Center" s:WrapText="1"/>
+  </Style>
+  <Style s:ID="left_u" s:Parent="left">
+   <Borders><Border s:Position="Top" s:LineStyle="Continuous" s:Weight="1"/></Borders>
+  </Style>
+  <Style s:ID="left_ub" s:Parent="left_u">
+   <Font x:CharSet="161" s:Bold="1"/>
+  </Style>
+  <Style s:ID="center">
+   <Alignment s:Horizontal="Center" s:Vertical="Center" s:WrapText="1"/>
+  </Style>
+  <Style s:ID="center_u" s:Parent="center">
+   <Borders><Border s:Position="Top" s:LineStyle="Continuous" s:Weight="1"/></Borders>
+  </Style>
+  <Style s:ID="center_ub" s:Parent="center_u">
+   <Font x:CharSet="161" s:Bold="1"/>
+  </Style>
+  <Style s:ID="right">
+   <Alignment s:Horizontal="Right" s:Vertical="Center" s:WrapText="1"/>
+  </Style>
+  <Style s:ID="right_u" s:Parent="right">
+   <Borders><Border s:Position="Top" s:LineStyle="Continuous" s:Weight="1"/></Borders>
+  </Style>
+  <Style s:ID="right_ub" s:Parent="right_u">
+   <Font x:CharSet="161" s:Bold="1"/>
+  </Style>
+  <Style s:ID="date">
+   <Alignment s:Horizontal="Left" s:Vertical="Center" s:WrapText="1"/>
+   <NumberFormat s:Format="d/m/yyyy;-0;0;@"/>
+  </Style>
+  <Style s:ID="date_u" s:Parent="date">
+   <Borders><Border s:Position="Top" s:LineStyle="Continuous" s:Weight="1"/></Borders>
+  </Style>
+  <Style s:ID="date_ub" s:Parent="date_u">
+   <Font x:CharSet="161" s:Bold="1"/>
+  </Style>
+  <Style s:ID="date.iso">
+   <Alignment s:Horizontal="Left" s:Vertical="Center" s:WrapText="1"/>
+   <NumberFormat s:Format="yyyy-mm-dd;-0;0;@"/>
+  </Style>
+  <Style s:ID="date.iso_u" s:Parent="date.iso">
+   <Borders><Border s:Position="Top" s:LineStyle="Continuous" s:Weight="1"/></Borders>
+  </Style>
+  <Style s:ID="date.iso_ub" s:Parent="date.iso_u">
+   <Font x:CharSet="161" s:Bold="1"/>
+  </Style>
+  <Style s:ID="time">
+   <Alignment s:Horizontal="Left" s:Vertical="Center" s:WrapText="1"/>
+   <NumberFormat s:Format="hh:mm:ss;-0;0;@"/>
+  </Style>
+  <Style s:ID="time_u" s:Parent="time">
+   <Borders><Border s:Position="Top" s:LineStyle="Continuous" s:Weight="1"/></Borders>
+  </Style>
+  <Style s:ID="time_ub" s:Parent="time_u">
+   <Font x:CharSet="161" s:Bold="1"/>
+  </Style>
+  <Style s:ID="timestamp">
+   <Alignment s:Horizontal="Left" s:Vertical="Center" s:WrapText="1"/>
+   <NumberFormat s:Format="yyyy-mm-dd hh:mm:ss.000;-0;0;@"/>
+  </Style>
+  <Style s:ID="timestamp_u" s:Parent="timestamp">
+   <Borders><Border s:Position="Top" s:LineStyle="Continuous" s:Weight="1"/></Borders>
+  </Style>
+  <Style s:ID="timestamp_ub" s:Parent="timestamp_u">
+   <Font x:CharSet="161" s:Bold="1"/>
+  </Style>
+ </Styles>
+ <Worksheet s:Name="Sheet1">
+  <Table>
+   <Column s:StyleID="left" s:AutoFitWidth="1"/>
+   <Column s:StyleID="left" s:AutoFitWidth="1"/>
+   <Column s:StyleID="left" s:AutoFitWidth="1"/>
+   <Column s:StyleID="count" s:AutoFitWidth="1"/>
+   <Column s:StyleID="amount" s:AutoFitWidth="1"/>
+   <Row s:Height="28.346457" s:StyleID="bold">
+    <Cell s:StyleID="left_ub"><Data s:Type="String">Bank</Data></Cell>
+    <Cell s:StyleID="left_ub"><Data s:Type="String">Type</Data></Cell>
+    <Cell s:StyleID="left_ub"><Data s:Type="String">Status</Data></Cell>
+    <Cell s:StyleID="count_ub"><Data s:Type="String">Count</Data></Cell>
+    <Cell s:StyleID="amount_ub"><Data s:Type="String">Amount</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">07</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">139.840000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">139.840000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">139.840000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0011</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">07</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">4504</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">426864.540000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">60</Data></Cell>
+    <Cell><Data s:Type="Number">3</Data></Cell>
+    <Cell><Data s:Type="Number">332.150000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">64</Data></Cell>
+    <Cell><Data s:Type="Number">214</Data></Cell>
+    <Cell><Data s:Type="Number">49048.540000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">99</Data></Cell>
+    <Cell><Data s:Type="Number">33</Data></Cell>
+    <Cell><Data s:Type="Number">11970.250000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">4754</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">488215.480000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">23016</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">4010635.020000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">23016</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">4010635.020000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">15</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">111</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">171699.120000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">111</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">171699.120000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">23</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">108</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">10689.500000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">108</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">10689.500000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">27</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1730</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">188856.630000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1730</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">188856.630000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">29719</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">4870095.750000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0014</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">07</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">3446</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">474344.850000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">60</Data></Cell>
+    <Cell><Data s:Type="Number">3</Data></Cell>
+    <Cell><Data s:Type="Number">12988.840000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">63</Data></Cell>
+    <Cell><Data s:Type="Number">20</Data></Cell>
+    <Cell><Data s:Type="Number">6698.660000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">64</Data></Cell>
+    <Cell><Data s:Type="Number">154</Data></Cell>
+    <Cell><Data s:Type="Number">74375.150000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">99</Data></Cell>
+    <Cell><Data s:Type="Number">10</Data></Cell>
+    <Cell><Data s:Type="Number">10196.280000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">3633</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">578603.780000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">12856</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">2581940.390000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">12856</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">2581940.390000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">15</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">50</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">81060.130000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">50</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">81060.130000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">23</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">106</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">13304.940000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">106</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">13304.940000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">27</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1087</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">132782.330000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1087</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">132782.330000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">17732</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">3387691.570000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0016</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">07</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">95</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">9843.240000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">63</Data></Cell>
+    <Cell><Data s:Type="Number">1</Data></Cell>
+    <Cell><Data s:Type="Number">564.750000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">64</Data></Cell>
+    <Cell><Data s:Type="Number">5</Data></Cell>
+    <Cell><Data s:Type="Number">405.620000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">99</Data></Cell>
+    <Cell><Data s:Type="Number">2</Data></Cell>
+    <Cell><Data s:Type="Number">332.480000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">103</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">11146.090000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">308</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">56346.380000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">308</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">56346.380000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">15</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">5</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">8405.140000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">5</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">8405.140000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">416</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">75897.610000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0017</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">07</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">4627</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">511650.150000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">60</Data></Cell>
+    <Cell><Data s:Type="Number">20</Data></Cell>
+    <Cell><Data s:Type="Number">4174.510000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">62</Data></Cell>
+    <Cell><Data s:Type="Number">3</Data></Cell>
+    <Cell><Data s:Type="Number">164.520000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">64</Data></Cell>
+    <Cell><Data s:Type="Number">286</Data></Cell>
+    <Cell><Data s:Type="Number">120200.250000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">99</Data></Cell>
+    <Cell><Data s:Type="Number">3</Data></Cell>
+    <Cell><Data s:Type="Number">1764.080000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">4939</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">637953.510000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">22040</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">4217031.750000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">22040</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">4217031.750000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">15</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">211</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">384160.860000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">211</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">384160.860000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">19</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">61</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">511.960000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">511.960000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">23</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">151</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">14546.930000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">151</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">14546.930000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">27</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1765</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">205695.190000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1765</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">205695.190000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">29107</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">5459900.200000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0026</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">07</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1920</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">249649.820000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">60</Data></Cell>
+    <Cell><Data s:Type="Number">3</Data></Cell>
+    <Cell><Data s:Type="Number">504.380000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">63</Data></Cell>
+    <Cell><Data s:Type="Number">2</Data></Cell>
+    <Cell><Data s:Type="Number">301.360000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">64</Data></Cell>
+    <Cell><Data s:Type="Number">112</Data></Cell>
+    <Cell><Data s:Type="Number">30490.170000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">99</Data></Cell>
+    <Cell><Data s:Type="Number">20</Data></Cell>
+    <Cell><Data s:Type="Number">13081.240000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">2057</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">294026.970000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">9382</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">1713419.160000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">9382</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">1713419.160000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">15</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">119</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">205738.040000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">119</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">205738.040000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">23</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">54</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">7394.390000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">54</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">7394.390000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">27</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">627</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">82308.480000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">627</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">82308.480000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">12239</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">2302887.040000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0069</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">07</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">16</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">3015.600000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">64</Data></Cell>
+    <Cell><Data s:Type="Number">1</Data></Cell>
+    <Cell><Data s:Type="Number">88.380000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">17</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">3103.980000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">112</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">23343.940000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">112</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">23343.940000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">15</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">561.130000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">561.130000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">130</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">27009.050000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0071</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">07</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">23</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">3021.160000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">64</Data></Cell>
+    <Cell><Data s:Type="Number">2</Data></Cell>
+    <Cell><Data s:Type="Number">480.460000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">25</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">3501.620000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">98</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">16843.560000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">98</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">16843.560000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">123</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">20345.180000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0075</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">07</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">3</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">296.550000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">3</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">296.550000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">68</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">11777.000000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">68</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">11777.000000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">15</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">402.940000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">402.940000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">72</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">12476.490000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0084</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">8858.820000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">8858.820000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">8858.820000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0087</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">07</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">64</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">8786.580000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">64</Data></Cell>
+    <Cell><Data s:Type="Number">2</Data></Cell>
+    <Cell><Data s:Type="Number">154.810000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">66</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">8941.390000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">507</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">124672.290000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">507</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">124672.290000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">15</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">11</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">19056.920000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">11</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">19056.920000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">584</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">152670.600000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0088</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">38</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">5775.360000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">38</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">5775.360000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">38</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">5775.360000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0089</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">43</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">9752.000000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">43</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">9752.000000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">43</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">9752.000000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0091</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">07</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">2</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">196.650000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">2</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">196.650000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">73</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">9882.000000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">73</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">9882.000000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">75</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">10078.650000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0094</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">14</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">7968.400000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">14</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">7968.400000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">14</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">7968.400000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0095</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">07</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">3</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">365.790000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell><Data s:Type="String">64</Data></Cell>
+    <Cell><Data s:Type="Number">2</Data></Cell>
+    <Cell><Data s:Type="Number">135.780000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">5</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">501.570000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">28</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">7256.000000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">28</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">7256.000000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">33</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">7757.570000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"><Data s:Type="String">B0099</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">11</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">16</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">1940.000000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">16</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">1940.000000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">15</Data></Cell>
+    <Cell s:StyleID="left_u"><Data s:Type="String">00</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">1636.320000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">1</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">1636.320000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell/>
+    <Cell s:StyleID="left_u"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"><Data s:Type="Number">17</Data></Cell>
+    <Cell s:StyleID="amount_u"><Data s:Type="Number">3576.320000</Data></Cell>
+   </Row>
+   <Row s:Height="28.346457" s:StyleID="bold">
+    <Cell s:StyleID="left_ub"><Data s:Type="String">TOTAL</Data></Cell>
+    <Cell s:StyleID="left_ub"/>
+    <Cell s:StyleID="left_ub"/>
+    <Cell s:StyleID="count_ub"><Data s:Type="Number">90344</Data></Cell>
+    <Cell s:StyleID="amount_ub"><Data s:Type="Number">16362880.450000</Data></Cell>
+   </Row>
+   <Row>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="left_u"/>
+    <Cell s:StyleID="count_u"/>
+    <Cell s:StyleID="amount_u"/>
+   </Row>
+  </Table>
+ </Worksheet>
+</Workbook>

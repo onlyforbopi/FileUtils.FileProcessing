@@ -1,0 +1,18 @@
+Number of arguments: 4 arguments.
+Argument List: ['Converter.py', '/home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/input2.txt.hex.conv.hex.conv.hex.conv', '/home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/input2.txt.hex.conv.hex.conv.hex.conv.hex.conv', 'hex'] 
+
+Correct number of arguments provided: 3
+
+Function name: Converter.py
+1. argument: /home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/input2.txt.hex.conv.hex.conv.hex.conv
+2. argument: /home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/input2.txt.hex.conv.hex.conv.hex.conv.hex.conv
+3. argument: hex
+
+
+Script name : Converter.py
+Script directory : /home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER
+Script started at: Wed Nov 23 12:05:38 2016
+Processing
+
+Amount of lines processed: 111
+Script terminating

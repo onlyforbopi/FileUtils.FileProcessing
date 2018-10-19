@@ -1,0 +1,19 @@
+use strict;
+use warnings;
+
+# my $file = 'CSP8216.orig.iso-8859-1.head10';
+my $file = '2010.head';
+# my $file = 'CSP8216.orig.iso-8859-1.head10.utf-8.iso-8859-1.dos2unix';
+open my $info, $file or die "Die: Could not open $file: $!";
+
+while(my $line = <$info>)
+{
+    # First character is at offset zero. # Zero-based string indexing.
+    # print $line; print "\n";
+    print $line;
+    print length($line); print "\n";
+    # print length($line);
+    # print substr($line, 0, 40);  print "\n";
+}
+
+close $info;

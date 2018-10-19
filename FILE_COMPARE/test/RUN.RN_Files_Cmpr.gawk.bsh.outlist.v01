@@ -1,0 +1,21 @@
+/home/tede/n55115/Joblib/Utils/file_processing/FILE_COMPARE/GAWK/RUN/RUN.RN_Files_Cmpr.gawk.bsh  Started at 2016-10-27 13:55:35::665166959
+
+FILE_IN_FLTR = @greeks_1.fltr@
+FILE_IN_BASE = @greeks_1.base@
+FILE_OT_COMN = @greeks_1.base.xstY@
+FILE_OT_DIFF = @greeks_1.base.xstN@
+fltr_srt = @13@
+fltr_len = @9@
+base_srt = @25@
+base_len = @9@
+
+GAwk Started
+
+Read : line_cnt_fltr = @8@
+Read : line_cnt_base = @10@
+Same : line_cnt_comn = @7@
+Diff : line_cnt_diff = @3@
+
+GAwk Ended
+
+/home/tede/n55115/Joblib/Utils/file_processing/FILE_COMPARE/GAWK/RUN/RUN.RN_Files_Cmpr.gawk.bsh  Ended at   2016-10-27 13:55:35::782305328

@@ -1,0 +1,12 @@
+RUN.Converter.bsh performed at Wed Nov 23 10:45:22 EET 2016 :: Subscript = Converter.py :: Mode = Single_File :: Inputs = input.txt
+RUN.Converter.bsh performed at Wed Nov 23 10:47:01 EET 2016 :: Subscript = Converter.py :: Mode = Single_File :: Inputs = input.txt
+RUN.Converter.bsh performed at Wed Nov 23 10:47:22 EET 2016 :: Subscript = Converter.py :: Mode = Directory :: Inputs = /home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/
+RUN.Converter.bsh performed at Wed Nov 23 10:51:47 EET 2016 :: Subscript = Converter.py :: Mode = Directory :: Inputs = /home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/
+RUN.Converter.bsh performed at Wed Nov 23 11:37:58 EET 2016 :: Subscript = Converter.py :: Mode = Directory :: Inputs = /home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/
+RUN.Converter.bsh performed at Wed Nov 23 11:45:30 EET 2016 :: Subscript = Converter.py :: Mode = Directory :: Inputs = /home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/
+RUN.Converter.bsh performed at Wed Nov 23 11:46:25 EET 2016 :: Subscript = Converter.py :: Mode = Directory :: Inputs = /home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/
+RUN.Converter.bsh performed at Wed Nov 23 11:53:31 EET 2016 :: Subscript = Converter.py :: Mode = Directory :: Inputs = /home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/
+RUN.Converter.bsh performed at Wed Nov 23 11:55:48 EET 2016 :: Subscript = Converter.py :: Mode = Directory :: Inputs = /home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/
+RUN.Converter.bsh performed at Wed Nov 23 12:00:39 EET 2016 :: Subscript = Converter.py :: Mode = Directory :: Inputs = /home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/
+RUN.Converter.bsh performed at Wed Nov 23 12:04:59 EET 2016 :: Subscript = Converter.py :: Mode = Directory :: Inputs = /home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/
+RUN.Converter.bsh performed at Wed Nov 23 12:05:38 EET 2016 :: Subscript = Converter.py :: Mode = Directory :: Inputs = /home/tede/n55115/Joblib/Utils/file_processing/FILE_CONVERTER/testdir/

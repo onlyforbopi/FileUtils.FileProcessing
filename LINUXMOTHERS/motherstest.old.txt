@@ -1,0 +1,6 @@
+SAPRUN01TEST.bat;/home/tede/n55115/PD/testmothersplit/
+saprun12;/home/tede/n55115/PD/testmothersplit/
+saprun04;/home/tede/n55115/PD/testmothersplit/
+saprun03;/home/tede/n55115/PD/testmothersplit/testmothersplitin/
+saprun02;/home/tede/n55115/PD/testmothersplit/testmothersplitin22/
+saprun02;/home/tede/n55115/PD/testmothersplit/testmothersplitin/

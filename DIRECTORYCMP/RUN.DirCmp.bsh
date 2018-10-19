@@ -1,0 +1,188 @@
+#!/bin/bash
+
+#################################################################################################
+#                                                                                                                                                                                                                                                                                           ##
+#  	Job: RUN.DirCmp.bsh
+#  	Location: /home/tede/n55115/Joblib/Utils/file_processing/DIRECTORYCMP
+#
+#	Description : 	Template Wrapper Script
+#					Calls DirCmp.py
+#					Compares two directories, outputs differing files
+#
+#################################################################################################
+#  
+# 	Usage: RUN.DirCmp.bsh <DIR_IN> <DIR_IN2>
+#  	Parameters: <DIR_IN> : First directory to be compared
+#              <DIR_IN2>: Second directory to be compared
+#                      
+#
+#  	Calls: DirCmp.py
+#	Parameters 	<DIR_IN> : First directory to be compared
+#				<DIR_IN2>: Second directory to be compared
+#		
+#  Global constants:  ARGS_NBR=2
+#
+#################################################################################################
+#
+#  Function: TEMPLATE wrapper script that calls DirCmp.py which:
+#            - Iterates foreach file in given directory
+#			 - Assigns filenames into two different sets
+# 			 - Compares the sets and outputs results
+#
+#  Output: - Screen.
+#          - Logs (outlist/errlist) in directory where job is runed.
+#
+#################################################################################################
+
+# Environment variables.
+# --> in .profile
+source $HOME"/.profile"
+
+# Parameters.
+#
+# DD_files.
+declare        DIR_IN
+declare        DIR_IN2
+#
+declare        p_rcrs
+
+# Constants.
+readonly       ARGS_NBR=2
+readonly       JOB_RUN="DirCmp.py"
+#
+readonly       THIS_JOB_FULL=$0
+readonly       THIS_JOB_SMPL=${0##*/}
+readonly       JOB_OUT=$THIS_JOB_SMPL".outlist"
+readonly       JOB_ERR=$THIS_JOB_SMPL".errlist"
+#
+declare -r -x  RCRS_YES="r"
+declare -r -x  RCRS_NOT="n"
+
+# Variables.
+declare        step
+declare        pgm
+declare        pgm_full_path
+
+# Functions.
+function chk_abnd_silent()
+{
+
+	# Checks return value of command
+	# Called as : chk_abnd_silent $?
+	# Notes : Silent, doesnt print
+	
+  local     abnd
+  
+  abnd=$1
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  fi
+  
+  return 0
+}
+
+function chk_abnd()
+{
+	
+	# Checks return value of command
+	# Called as : chk_abnd $?
+	# Notes : Silent, doesnt print
+
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+function house_keep()
+{
+	# Parses command line parameters
+	# Checks their number
+	# Assigns them to internal script variables
+	# Called as house_keep $# $1 $2 $3 ...
+
+  local     argc
+  
+  argc=$1
+  chk_abnd_silent $? # Check return status.
+  
+  # If number of arguments is incorrect.
+  if [ $argc -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $argc
+      echo "Must be = " $ARGS_NBR
+      echo "Usage: " $THIS_JOB_SMPL " <DIR_IN> r|n"
+      exit 69
+  fi
+  
+  # Fill variables.
+  DIR_IN=$2
+  DIR_IN2=$3
+  
+  chk_abnd_silent $? # Check return status.
+  
+
+  
+  return 0
+}
+
+############################################################################
+# Script start.
+#
+echo; echo $THIS_JOB_FULL " Started at ""$(date +"%Y-%m-%d %H:%M:%S::%N")"; echo
+echo $THIS_JOB_FULL " Started at ""$(date +"%Y-%m-%d %H:%M:%S::%N")" > $JOB_OUT; echo >> $JOB_OUT
+
+# Check arguments and construct file names.
+house_keep $# $1 $2
+chk_abnd_silent $? # Check return status.
+
+############################################################################
+#  Run job.
+#
+date
+echo "Submit Job     " $JOB_RUN " ..."
+echo "outlist_name = " $JOB_OUT
+echo "errlist_name = " $JOB_ERR
+echo
+echo "DIR_IN = @"$DIR_IN"@"
+echo "p_rcrs = @"$p_rcrs"@"
+echo
+#
+date >> $JOB_OUT
+echo "Submit Job     " $JOB_RUN " ..." >> $JOB_OUT
+echo "outlist_name = " $JOB_OUT        >> $JOB_OUT
+echo "errlist_name = " $JOB_ERR        >> $JOB_OUT
+echo >> $JOB_OUT
+echo "DIR_IN = @"$DIR_IN"@" >> $JOB_OUT
+echo "p_rcrs = @"$p_rcrs"@"   >> $JOB_OUT
+echo >> $JOB_OUT
+
+# Run Job.
+python $JOB_RUN  $DIR_IN $DIR_IN2 1>>$JOB_OUT  2>$JOB_ERR
+# Check return status.
+chk_abnd $?
+#
+
+############################################################################
+# Script end.
+#
+echo; echo >> $JOB_OUT; 
+echo $THIS_JOB_FULL " Ended at   ""$(date +"%Y-%m-%d %H:%M:%S::%N")"; echo
+echo $THIS_JOB_FULL " Ended at   ""$(date +"%Y-%m-%d %H:%M:%S::%N")" >> $JOB_OUT
+chk_abnd $? # Check return status.
+
+sleep 1s
+touch $JOB_OUT $JOB_ERR
+chk_abnd_silent $? # Check return status.
+#
+
+exit $?
+#

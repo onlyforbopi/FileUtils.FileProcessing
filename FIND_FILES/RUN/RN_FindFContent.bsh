@@ -1,0 +1,188 @@
+#!/bin/bash
+
+#################################################################################################
+#                                                                                                                                                                                                                                                                                           ##
+#  Job:           RN_FindFContent.bsh
+#  Location:      /home/tede/n55115/Joblib/Utils/file_processing/FIND_FILES/RUN 
+#  
+#  Description:   Finds files' name in directory (recursively or not)
+#                 containing string in body (case (in)sensitive).
+#  
+#################################################################################################
+#
+#  Called by:     RUN.RN_FindFContent.bsh  <srch_dir>  <srch_str>  <file_out>  <case>  <rcrs>
+#  
+#  Parameters:    (see calling script documentation).
+#
+#
+#  Uses globals:  (see calling script documentation).
+#
+#################################################################################################
+#
+#  Function:
+#
+#  {
+#     foreach file in <srch_dir> <rcrs>
+#     {
+#        if file contains <srch_str> <case>
+#           write file name to <file_out>
+#     }
+#  }
+#
+#################################################################################################
+#
+#  Output:        (see calling script documentation).
+#
+#################################################################################################
+
+# Environment variables.
+# --> in .profile
+#
+# --> in RUN.JOB
+#        CASE_SENS
+#        CASE_INSN
+#
+#        RCRS_YES
+#        RCRS_NOT
+
+# Parameters.
+declare        p_srch_dir
+declare        p_srch_str
+declare        p_file_out
+declare        p_case
+declare        p_rcrs
+#
+
+# Constants.
+readonly       ARGS_NBR=5
+#
+readonly       THIS_JOB_FULL=$0
+readonly       THIS_JOB_SMPL=${0##*/}
+#
+
+# Functions.
+function chk_abnd_silent()
+{
+  local     abnd
+  
+  abnd=$1
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  fi
+  
+  return 0
+}
+#
+
+function chk_abnd()
+{
+	# Checks return value
+	# Called as chk_abnd_silent $?
+	
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  else
+    echo "Done"; echo
+  fi
+  
+  return 0
+}
+#
+
+function house_keep()
+{
+	# Checks parameters (number)
+	# Assign parameters to variables
+	# Called as house_keep $# $1 $2 ...
+	
+  local        nbr_args=$1
+  
+  if [ $nbr_args -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $nbr_args '. Must be: ' $ARGS_NBR '.'
+      echo "Usage: " $THIS_JOB_SMPL " <srch_dir> <srch_str> <file_out> s|i r|n"
+      exit 69
+  fi
+  
+  p_srch_dir=$2
+  p_srch_str=$3
+  # p_srch_str="ÄÅÄÄÇÅ"
+  # p_srch_str="PPOS0000"
+  p_file_out=$4
+  p_case=$5
+  p_rcrs=$6
+
+  chk_abnd_silent $? # Check return status.  
+
+  return 0
+}
+#
+
+############################################################################
+# Script start.
+#
+echo; echo $THIS_JOB_FULL " started at " `date`; echo
+
+# Check arguments and construct file names.
+house_keep $# $1 $2 $3 $4 $5
+chk_abnd_silent $? # Check return status.
+
+echo "p_srch_dir = @"$p_srch_dir"@"
+echo "p_srch_str = @"$p_srch_str"@"
+echo "p_file_out = @"$p_file_out"@"
+echo "p_case     = @"$p_case"@"
+echo "p_rcrs     = @"$p_rcrs"@"
+echo
+
+# Do work.
+
+# xargs to iterate over file list,
+# grep to look for patterns.
+#
+# If p_rcrs is recursive.
+if [ $p_rcrs == $RCRS_YES ]; then
+   # If p_case is case sensitive, then use grep  to get sensitive matches
+   if [ $p_case == $CASE_SENS ]; then
+      find $p_srch_dir  -type f -print0 | xargs -0 grep -l     $p_srch_str > $p_file_out
+   else
+   # If p_case is case insensitive, then use grep -i to get unsensitive matches
+   if [ $p_case == $CASE_INSN ]; then
+      find $p_srch_dir  -type f -print0 | xargs -0 grep -l -i  $p_srch_str > $p_file_out
+   fi
+   fi
+else
+# If p_rcrs is not recursive then use '-maxdepth 1' for one level directory traversal.
+if [ $p_rcrs == $RCRS_NOT ]; then
+   # If p_case is case sensitive, then use grep  to get sensitive matches
+   if [ $p_case == $CASE_SENS ]; then
+      find $p_srch_dir  -maxdepth 1 -type f -print0 | xargs -0 grep -l     $p_srch_str > $p_file_out
+   else
+   # If p_case is case insensitive, then use grep -i to get unsensitive matches
+   if [ $p_case == $CASE_INSN ]; then
+      find $p_srch_dir  -maxdepth 1 -type f -print0 | xargs -0 grep -l -i  $p_srch_str > $p_file_out
+   fi
+   fi
+fi
+fi
+#
+
+############################################################################
+# End of script.
+# 
+echo; echo $THIS_JOB_FULL " ended at " `date`
+#
+
+
+
+
+
+
+
+

@@ -1,0 +1,133 @@
+#!/bin/bash
+
+# Environment variables.
+# --> in .profile
+
+# DD_files.
+export         FILE_IN_FLTR
+export         FILE_IN_BASE
+export         FILE_OT_XSTY
+export         FILE_OT_XSTN
+
+# Constants.
+readonly       ARGS_NBR=2
+readonly       JOB_PRF="./Office_Incl"
+readonly       JOB_SUF=".bsh"
+readonly       LST_SUF=".out"
+readonly       ERR_SUF=".err"
+readonly       THIS_JOB=${0##*/}
+
+
+# Important variables.
+declare        step
+declare        pgm
+declare        pgm_full_path
+
+# Functions.
+function chk_abnd()
+{
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    #rm +++++++++++++
+    exit $abnd
+    #return $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+function constr_file_names()
+{
+  # Set DD_files names.
+  FILE_IN_FLTR=$1
+  FILE_IN_BASE=$2
+  #
+  FILE_OT_XSTY=$FILE_IN_BASE".xsty"
+  FILE_OT_XSTN=$FILE_IN_BASE".xstn"
+  chk_abnd $? # Check return status.
+
+  return 0
+}
+
+function constr_job_name()
+{
+  job_name=$JOB_PRF$JOB_SUF
+  out_name=$JOB_PRF$LST_SUF
+  err_name=$JOB_PRF$ERR_SUF
+  chk_abnd $? # Check return status.
+
+  return 0
+}
+
+function house_keep()
+{
+  local     argc
+  
+  argc=$1
+  chk_abnd $? # Check return status.
+  
+  if [ $argc -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $argc
+      echo "Must be = " $ARGS_NBR
+      echo "Usage: " $THIS_JOB " <FILE_IN_FLTR> <FILE_IN_BASE>"
+      exit 69
+  fi
+  
+  constr_file_names $2 $3
+  chk_abnd $? # Check return status.
+  constr_job_name
+  chk_abnd $? # Check return status.
+  
+  return 0
+}
+
+############################################################################
+# Script start.
+echo $THIS_JOB " started at " `date`; echo
+
+# Check arguments and construct file names.
+house_keep $# $1 $2
+chk_abnd $? # Check return status.
+
+echo "FILE_IN_FLTR =     @"$FILE_IN_FLTR"@"
+echo "FILE_IN_BASE =     @"$FILE_IN_BASE"@"
+echo "FILE_OT_XSTY =     @"$FILE_OT_XSTY"@"
+echo "FILE_OT_XSTN =     @"$FILE_OT_XSTN"@"
+echo "FILE_IN_FLTR =     @"$FILE_IN_FLTR"@"     > $out_name
+echo "FILE_IN_BASE =     @"$FILE_IN_BASE"@"     >> $out_name
+echo "FILE_OT_XSTY =     @"$FILE_OT_XSTY"@"     >> $out_name
+echo "FILE_OT_XSTN =     @"$FILE_OT_XSTN"@"     >> $out_name
+echo
+
+############################################################################
+#  Run job.
+#
+date
+echo "Submit Job " $job_name " ..."
+echo "out_name = " $out_name
+echo "err_name = " $err_name
+$job_name 1>$out_name 2>$err_name
+
+#  Check return status.
+chk_abnd $?
+#
+
+# Unset DD_variables.
+unset         FILE_IN_FLTR  FILE_IN_BASE  FILE_OT_XSTY  FILE_OT_XSTN
+#
+
+sleep 1s
+touch $out_name $err_name
+chk_abnd $?
+#
+
+############################################################################
+# End of script.
+# 
+echo $THIS_JOB " ended at " `date`; echo
+#

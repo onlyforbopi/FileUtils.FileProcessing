@@ -1,0 +1,153 @@
+#!/bin/bash
+
+# Environment variables.
+# --> in .profile
+
+# Constants.
+readonly       ARGS_NBR=2
+readonly       JOB_RUN="./TM_Single_Invoice_File_Prcs.gawk"
+#
+readonly       THIS_JOB=$0
+readonly       THIS_JOB_smpl=${0##*/}
+readonly       JOB_OUT=$THIS_JOB_smpl".outlist"
+readonly       JOB_ERR=$THIS_JOB_smpl".errlist"
+
+# Files.
+declare        FILE_IN
+declare        FILE_OT
+
+# Functions.
+function chk_abnd_silent()
+{
+  local     abnd
+  
+  abnd=$1
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    sleep 1s
+    touch $JOB_OUT $JOB_ERR
+    exit $abnd
+  fi
+  
+  return 0
+}
+
+function chk_abnd()
+{
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    sleep 1s
+    touch $JOB_OUT $JOB_ERR
+    exit $abnd
+  else
+    echo "Done"; echo
+  fi
+  
+  return 0
+}
+
+function constr_file_names()
+{
+  # Set DD_files names.
+  FILE_IN=$1
+  FILE_OT=$2
+  chk_abnd $? # Check return status.
+
+  return 0
+}
+
+function house_keep()
+{
+  local     argc
+  
+  argc=$1
+  chk_abnd $? # Check return status.
+  
+  if [ $argc -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $argc
+      echo "Must be = " $ARGS_NBR
+      echo "Usage: " $THIS_JOB " <FILE_IN> <FILE_OT>"
+      echo
+      exit 69
+  fi
+  
+  constr_file_names $2 $3
+  chk_abnd $? # Check return status.
+  
+  return 0
+}
+
+############################################################################
+# Script start.
+#
+echo
+echo $THIS_JOB " Started at ""$(date +"%Y-%m-%d %H:%M:%S::%N")"; echo
+echo $THIS_JOB " Started at ""$(date +"%Y-%m-%d %H:%M:%S::%N")" > $JOB_OUT; echo >> $JOB_OUT
+
+############################################################################
+# Check arguments and construct file names.
+#
+house_keep $# $1 $2
+chk_abnd $? # Check return status.
+#
+
+############################################################################
+# Prepare files.
+#
+
+# Delete output file because awk script appends to it.
+if [ -f $FILE_OT ]; then
+  echo "Deleting file " $FILE_OT " ..."
+  rm $FILE_OT
+  chk_abnd $? # Check return status.
+fi
+
+# Touch output file because if there are no data written it will not be created from awk script.
+echo "Touching file " $FILE_OT " ..."
+touch $FILE_OT
+chk_abnd $? # Check return status.
+#
+
+echo "FILE_IN = @"$FILE_IN"@"
+echo "FILE_OT = @"$FILE_OT"@"
+echo "FILE_IN = @"$FILE_IN"@" >> $JOB_OUT
+echo "FILE_OT = @"$FILE_OT"@" >> $JOB_OUT
+echo
+
+############################################################################
+# Run awk.
+#
+date
+echo "Submit Job " $JOB_RUN " ..."
+echo "out_name = " $JOB_OUT
+echo "err_name = " $JOB_ERR
+#
+date >> $JOB_OUT
+echo "Submit Job " $JOB_RUN " ..." >> $JOB_OUT
+echo "out_name = " $JOB_OUT    >> $JOB_OUT
+echo "err_name = " $JOB_ERR    >> $JOB_OUT
+
+$JOB_RUN  -b  -v FILE_OT=$FILE_OT  -v JOB_OUT=$JOB_OUT  < $FILE_IN  2>$JOB_ERR
+chk_abnd $? # Check return status.
+#
+
+############################################################################
+# Script end.
+echo; echo >> $JOB_OUT
+echo $THIS_JOB " Ended at   ""$(date +"%Y-%m-%d %H:%M:%S::%N")"; echo
+echo $THIS_JOB " Ended at   ""$(date +"%Y-%m-%d %H:%M:%S::%N")" >> $JOB_OUT
+chk_abnd $? # Check return status.
+
+sleep 1s
+touch $JOB_OUT $JOB_ERR
+chk_abnd_silent $? # Check return status.
+#
+
+exit $?
+#

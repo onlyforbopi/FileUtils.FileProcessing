@@ -1,0 +1,15 @@
+RUN.FileCompare.prl.bsh  started at  Mon Apr 18 13:10:22 EEST 2016
+
+Mon Apr 18 13:10:22 EEST 2016
+Submit Job  ./FileCompare.prl  ...
+out_name =  ./FileCompare.prl.out
+err_name =  ./FileCompare.prl.err
+@ filter.txt @ base.txt @
+Mon Apr 18 13:10:22 EEST 2016
+Done
+
+Mon Apr 18 13:10:22 EEST 2016
+Done
+
+RUN.FileCompare.prl.bsh  ended at  Mon Apr 18 13:10:22 EEST 2016
+

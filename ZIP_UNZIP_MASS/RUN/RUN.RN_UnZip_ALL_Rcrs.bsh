@@ -1,0 +1,155 @@
+#!/bin/bash
+
+#################################################################################################
+#                                                                                                                                                                                                                                                                                           ##
+#  Job: RUN.RN_UnZip_ALL_Rcrs.bsh
+#  Location: /home/tede/n55115/Joblib/Utils/file_processing/ZIP_UNZIP_MASS/RUN
+#  
+#  Usage: RUN.RN_UnZip_ALL_Rcrs.bsh <dir> 
+#  Parameters: <dir> : Input directory.
+#              
+#
+#  Calls: RN_UnZip_ALL_Rcrs.bsh
+#
+#  Global constants: None
+#                    
+#  Function: TEMPLATE wrapper script that calls RN_UnZip_ALL_Rcrs.bsh which:
+#            - Iterates foreach file in directory <dir> (recursively or not based on <rcrs>).
+#            - Processes each file. (decompression)
+#
+#  Output: - Output files in directory <dir>.
+#          - Logs (outlist/errlist) in directory where job is runed.
+#
+#################################################################################################
+
+
+
+
+# Environment variables.
+# --> in .profile
+source $HOME"/.profile"
+
+# Important variables.
+declare        step
+declare        pgm
+declare        pgm_full_path
+
+# Constants.
+#
+# FILES-DIRS parameters.
+declare        DIR_PATH
+#
+readonly       JOB_RUN="RN_UnZip_ALL_Rcrs.bsh"
+readonly       JOB_LST=$JOB_RUN".outlist"
+readonly       JOB_ERR=$JOB_RUN".errlist"
+#
+readonly       ARGS_NBR=1
+readonly       THIS_JOB_FULL_PATH=$0
+readonly       THIS_JOB=${0##*/}
+
+# Functions.
+function chk_abnd()
+{
+	# Check return value of command
+	# Called as : chk_abnd $?
+
+  local     abnd
+  
+  abnd=$1
+  date
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+function chk_abnd_silent()
+{
+	# Check return value of command
+	# Called as : chk_abnd $?
+	# Notes : Silent mode - does not print
+
+  local     abnd
+  
+  abnd=$1
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  fi
+}
+
+function house_keep()
+{
+	# Checks number of arguments
+	# Checks type of arguments
+	# Parses arguments and assigns
+	# Called as house_keep $# $1 $2 ...
+
+  local     argc
+  
+  argc=$1
+  chk_abnd_silent $? # Check return status.
+
+  # Check arguments.
+  if [ $argc -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $argc
+      echo "Must be = " $ARGS_NBR
+      echo "Usage: " $THIS_JOB " <Dir>"
+      exit 69
+  fi
+  
+  # Construct file names.
+  DIR_PATH=$2
+  
+  return 0
+}
+
+
+############################################################################
+# Script start.
+#
+echo $THIS_JOB_FULL_PATH " started at " `date`; echo
+house_keep $# $1 # Check arguments and construct file names.
+#
+
+############################################################################
+#  Run job.
+#
+date
+
+# Report on Jobname / Outlist / errlist
+echo "Submit Job     " $JOB_RUN " ..."
+echo "outlist_name = " $JOB_LST
+echo "errlist_name = " $JOB_ERR; echo
+echo "DIR_PATH     =@"$DIR_PATH"@"
+
+
+# Call script
+$JOB_RUN  $DIR_PATH  1>$JOB_LST  2>$JOB_ERR
+
+#  Check return status.
+chk_abnd $?
+#
+
+############################################################################
+# Unset DD_variables.
+#
+unset         DIR_PATH
+chk_abnd_silent $?
+#
+
+############################################################################
+sleep 1s
+chk_abnd_silent $?
+touch $JOB_LST $JOB_ERR
+chk_abnd_silent $?
+#
+
+############################################################################
+# End of script.
+# 
+echo $THIS_JOB_FULL_PATH " ended at " `date`; echo
+#

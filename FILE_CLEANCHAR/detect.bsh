@@ -1,0 +1,193 @@
+#!/bin/bash
+
+#################################################################################################
+#                                                                                                                                                                                                                                                                                           ##
+#  Job: detect.bsh
+#  Location: /home/tede/n55115/Joblib/Utils/file_processing/FILE_CLEANCHAR
+#  
+#  Called by: RUN.DetectCharacters.bsh <dir|singlefile> 
+#  Parameters: <dir> : Input directory or single file
+
+#
+#  Uses global variables: DIR_IN
+#
+#################################################################################################
+#
+#  Function: (Note: doc_ functions just for documentation, not real code)
+#
+#  {
+#     #  Check for supplied parameters.
+#     house_keep()
+#
+#     #  STEP0001:
+#        #  Parse command line option
+#        Command line option = doc_pass_cmo()
+#
+#           # Create output file name.
+#           file_out = doc_create_file_out_name()
+#
+#           # Process file_out.
+#           doc_process_file(file_out)
+#        end
+#  }
+#  ______________________________________________________________________________________________
+#
+#  doc_pass_cmo()
+#  {
+#     	Parse command line option 
+#		from mother script and update variables
+#  }
+#  ______________________________________________________________________________________________
+#
+#  doc_create_file_out_name()
+#  {
+#     Create file_out name by adding a prefix or/and suffix to file_in name,
+#     without full path.
+#  }
+#  ______________________________________________________________________________________________
+#
+#  doc_process_file(file_out)
+#  {
+#     	Apply command, program or job on file_in.
+#     	Write file_out.
+#		Uses awk to detect specific sets of characters
+#  }
+#
+#################################################################################################
+#
+#  Output: 	Output files in directory <dir>.
+#			Output file form : .out
+# 			Contain lines with special characters + line number they appear in the original file
+#
+#################################################################################################
+#
+#  Method : Awk with pattern matching                 
+# 			Input files are scanned for Specific Hex values,   
+# 			if any are found awk prints these lines into output
+# 			and prints the NR variable                         
+#
+##################################################################################################
+
+#Constants
+readonly 	ARGS_NBR=2
+readonly 	THIS_JOB=${0##*/}
+
+#Variables
+declare 	FILE=$2
+declare 	pgm
+declare 	mode
+
+
+# Functions.
+function usage(){
+
+	# Prints usage
+	# Called as : usage
+
+	echo "$THIS_JOB is called as : "
+	echo "$THIS_JOB <option> <filename>"; echo
+	echo "Possible options : "
+	echo "			"
+
+}
+
+
+
+function chk_abnd()
+{
+	# Check return value of command
+	# Called as chk_abnd $?
+
+  local     abnd
+  
+  abnd=$1
+  date
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    #rm +++++++++++++
+    exit $abnd
+    #return $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+function chk_args()
+{
+	# Check number of provided parameters
+	# called as chk_args $?
+
+  local        nbr_args=$1
+  
+  if [ $nbr_args -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $nbr_args
+      exit 69
+  else
+	 echo "User has supplied the correct number of arguments"
+     return 0
+  fi
+}
+
+##################################################################
+# Script Start
+echo $THIS_JOB " started at " `date`; echo
+
+echo "Checking number of arguments"
+chk_args $#
+
+#######################################################
+#### Null : \x00									###
+#### Non printable : \x00-\x1F						###
+#### Ascii (English / Printable) : \x20-\x7F		###
+#### Extended Ascii ( Symbols / Greek )				###
+#######################################################
+
+
+# Case to parse passed parameter from mother script 
+
+case $1 in
+	-n) awk ' /[\x00]/ { print NR " :: " $0 }' $FILE > $FILE.out	
+		;;
+	-a) awk ' /[\x80-\xFF]/ { print NR " :: " $0 }' $FILE > $FILE.out	
+		;;
+	-p) awk ' /[\x00-\x1F]/ { print NR " :: " $0 }' $FILE > $FILE.out
+		;;
+	-b) awk ' /[\x00-\x1F\x80-\xFF]/ { print NR " :: " $0 }' $FILE > $FILE.out
+		;;
+	-e) awk ' /[\x00-\x1F\x80-\xBF]/ { print NR " :: " $0 }' $FILE > $FILE.out
+		;;
+	-k) awk ' /[\xAB\xAC\xAF\xA1\xA2\xA6\xA8\xA7\xBB\xB4\xC0]/ { print NR " :: " $0 } ' $FILE > $FILE.out 
+		;;
+	*) 	echo " Incorrect option"; 
+		usage
+		exit 
+		;;
+esac
+
+# Do work - Uncomment op you need
+
+# Detect null values (-n)
+# awk ' /[\x00]/ { print NR " :: " $0 }' $FILE > $FILE.out
+
+# Detect extended ascii / greek fonts (-a)
+# awk ' /[\x80-\xFF]/ { print NR " :: " $0 }' $FILE > $FILE.out
+
+# Detect non printable (-p)
+# awk ' /[\x00-\x1F]/ { print NR " :: " $0 }' $FILE > $FILE.out
+
+# Detect non printable and extended ascii/greek (-b)
+# awk ' /[\x00-\x1F\x80-\xFF]/ { print NR " :: " $0 }' $FILE > $FILE.out
+
+# Detect non printable and extended ascii (greek characters are not included) (-e)
+# awk ' /[\x00-\x1F\x80-\xBF]/ { print NR " :: " $0 }' $FILE > $FILE.out
+
+# Detect spam characters ( Kostas - Cobol List (Char transform) (-k)
+# awk ' /[\xAB\xAC\xAF\xA1\xA2\xA6\xA8\xA7\xBB\xB4\xC0]/ { print NR " :: " $0 } ' $FILE > $FILE.out 
+
+# Detect all of the above 
+	
+##############################################################
+# Script end
+echo $THIS_JOB " ended at " `date`; echo
+#
+	

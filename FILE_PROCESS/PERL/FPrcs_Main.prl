@@ -1,0 +1,44 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Readonly;
+
+# Our (user-defined) Packages.
+use FPrcs_Pckg_Misc;  # import default list of items.
+use FPrcs_Pckg_Main;  # import default list of items.
+
+# Globals.
+#
+# Constants.
+Readonly my    $THIS_NAME => $0 . " script";
+Readonly my    $NUM_ARGS  => $#ARGV + 1;
+Readonly my    $COR_ARGS  => 2;
+
+# FILES.
+# Input.
+my    $FILE_IN;
+# Output.
+my    $FILE_OT;
+
+# Variables.
+my    $rtrn_code = '';
+
+##########################################################################
+# Script start.
+print $THIS_NAME, " started\n";
+
+# Check arguments and Construct File Names.
+($FILE_IN, $FILE_OT) = chkRtrnArgs($NUM_ARGS, $COR_ARGS, $ARGV[0], $ARGV[1]);
+
+print "FILE_IN:@ $FILE_IN @\n";
+print "FILE_OT:@ $FILE_OT @\n";
+
+# Do work and Write Output Files.
+$rtrn_code = filePrcs($FILE_IN, $FILE_OT);
+print "rtrn_code = ", $rtrn_code, "\n";
+
+##########################################################################
+# Script end.
+print $THIS_NAME, " ended\n";
+#

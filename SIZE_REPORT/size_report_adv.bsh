@@ -1,0 +1,8 @@
+#!/bin/bash
+ 
+dir_in=$1
+echo $1
+cd $dir_in
+ 
+ 
+perl -e'%h=map{/.\s/;99**(ord$&&7)-$`,$_}`du -h`;die@h{sort%h}' $1

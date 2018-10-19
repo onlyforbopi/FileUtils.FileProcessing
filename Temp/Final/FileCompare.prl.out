@@ -1,0 +1,20 @@
+./FileCompare.prl package 01 started
+./FileCompare.prl package 01 ended
+./FileCompare.prl package 02 started
+./FileCompare.prl package 02 ended
+./FileCompare.prl script started
+@2@filter.txt@base.txt@
+sub chkRtrnArgs started
+cnt_argms       = 2.
+ARGMS_CRCT_GLBL = 2.
+1
+@2@filter.txt@base.txt@
+FILE_IN_FLTR:@ filter.txt @
+FILE_IN_BASE:@ base.txt @
+FILE_OT_xstY: base.txt.xstY
+FILE_OT_xstN: base.txt.xstN
+920 
+350 
+@@@@@@@@@@@@@@@@@
+rtrn_code = 0
+./FileCompare.prl script ended

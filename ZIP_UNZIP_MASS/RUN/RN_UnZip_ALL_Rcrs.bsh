@@ -1,0 +1,171 @@
+#!/bin/bash
+
+#################################################################################################
+#                                                                                                                                                                                                                                                                                           ##
+#  Job: RN_Zip_ALL_Rcrs.bsh
+#  Location: /home/tede/n55115/Joblib/Utils/file_processing/ZIP_UNZIP_MASS/RUN
+#  
+#  Called by: RUN.RN_UnZip_ALL_Rcrs.bsh <dir>
+#  Parameters: <dir> : Input directory.
+#
+#  Uses global variables :  None
+#                         
+#
+#################################################################################################
+#
+#  Function: (Note: doc_ functions just for documentation, not real code)
+#
+#  {
+#     #  Check for supplied parameters.
+#     house_keep()
+#
+#     #  STEP0001:
+#        #  Create file list to be processed. (Using find)
+#        file_list = doc_create_file_list()
+#
+#        foreach file_in in file_list: (Using -exec parameter on find utility)
+#           doc_Unzip_file(file_in)
+#        end
+#  }
+#  ______________________________________________________________________________________________
+#
+#  doc_create_file_list()
+#  {
+#     	Create file list for directory <dir>,
+#     	recursively or not based on <rcrs>.
+# 		File list is created using find - recursively
+#		Processing is performed by the -exec parameter on find
+#  }
+#  ______________________________________________________________________________________________
+#
+#  doc_Unzip_file(file_in)
+#  {
+#     UnZip given file
+#     Write file_out.
+#  }
+#
+#################################################################################################
+#
+#  Output: Output files in directory <dir> and suffix as original
+#
+#################################################################################################
+
+# Environment variables.
+# --> in .profile
+source $HOME"/.profile"
+
+# Constants.
+#
+# FILES-DIRS parameters.
+declare        DIR_PATH
+#
+readonly       ARGS_NBR=1
+readonly       THIS_JOB_FULL_PATH=$0
+readonly       THIS_JOB=${0##*/}
+
+# Important variables.
+declare        step
+declare        pgm
+declare        pgm_full_path
+
+# Functions.
+function chk_abnd()
+{
+
+	# Checks returns value of a command
+	# Called as chk_abnd $?
+	
+	
+  local     abnd
+  
+  abnd=$1
+  date
+
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  else
+    echo "Done"; echo
+  fi
+}
+
+function chk_abnd_silent()
+{
+
+	# Checks return value
+	# Called as : chk_abnd $?
+	# Notes : Does not print
+	
+  local     abnd
+  
+  abnd=$1
+
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  fi
+}
+
+function house_keep()
+{
+
+	# Checks number of parameters
+	# Assign parameters to script-local variables
+	# Called as house_keep $# $1 $2 ...
+
+  local     argc
+  
+  argc=$1
+  chk_abnd_silent $? # Check return status.
+
+  # Check arguments.
+  if [ $argc -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $argc
+      echo "Must be = " $ARGS_NBR
+      echo "Usage: " $THIS_JOB " <Dir>"
+      exit 69
+  fi
+  
+  # Construct file names.
+  DIR_PATH=$2
+  
+  return 0
+}
+
+############################################################################
+# Script start.
+#
+echo $THIS_JOB_FULL_PATH " started at " `date`; echo
+house_keep $# $1 # Check arguments and construct file names.
+#
+
+############################################################################
+#
+step=STEP0001
+
+date
+
+#Report on program step and directory to be unzipped
+echo "STEP " $step " unzipping recursively..."
+echo "DIR_PATH = @"$DIR_PATH"@"
+
+# Do work.
+# find generates a list of filenames
+# the -exec parameter applies the command to each
+find $DIR_PATH -type f -exec gunzip \{\} \;
+
+# Check return status.
+chk_abnd $?
+#
+
+############################################################################
+# Unset DD_variables.
+#
+unset          DIR_PATH
+#
+
+############################################################################
+# End of script.
+# 
+echo $THIS_JOB_FULL_PATH " ended at " `date`; echo
+#

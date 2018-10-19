@@ -1,0 +1,251 @@
+#!/bin/bash
+
+#################################################################################################
+#                                                                                                                                                                                                                                                                                           ##
+#  Job:           RUN.RN_Files_Cmpr.gawk.bsh
+#  Location:      /home/tede/n55115/Joblib/Utils/file_processing/FILE_COMPARE/GAWK/RUN
+#  
+#  Description:   Wrapper Script - File Comparison
+#                 Calls TRN_Files_Cmpr.gawk which:
+#                 Compares the given files based on specified filter / base substring
+#  
+#################################################################################################
+#
+#  Usage:         RUN.RN_Files_Cmpr.gawk.bsh <FILE_IN_FLTR> <FILE_IN_BASE> <FLTR_LINE_START> <FLTR_LINE_LENGTH> <BASE_LINE_START> <BASE_LINE_LENGTH>
+#  Parameters:    	<FILE_IN_FLTR> 		:  	File to be used as Filter.
+#                 	<FILE_IN_BASE> 		:  	File to be used as base
+#				  	<FLTR_LINE_START> 	:	Start of control substring on Filter File
+#					<FLTR_LINE_LENGTH>  :   Length of control substring on Filter File	
+#                   <BASE_LINE_START>   :   Start of control substring on Base File
+#					<BASE_LINE_LENGTH>  :   Length of Control Substring      
+#  
+#  Calls:         	RN_Files_Cmpr.gawk
+#  Parameters:    	FILE_OT_COMN	( Common Lines )
+#					FILE_OT_DIFF    ( Differing Lines )
+#					JOB_OUT			( Run log files )
+#					p_fltr_srt		( <FLTR_LINE_START> above )
+#					p_fltr_len		( <FLTR_LINE_LENGTH> above )
+#					p_base_srt		( <BASE_LINE_START> above )	
+#					p_base_len		( <BASE_LINE_LENGTH> )
+#                 
+#
+#  Globals:       ARGS_NBR = 6 ( Number of arguments )
+#
+#################################################################################################
+#
+#  Function:      Check for supplied parameters.
+#                 Call RN_Files_Cmpr.gawk with the parameters described above
+#
+#  Output:        Output files in directory where job is ran
+#                 Logs (outlist/errlist) in directory where job is ran
+#
+#################################################################################################
+
+# Environment variables.
+# --> in .profile
+source $HOME"/.profile"
+
+# Constants.
+readonly       ARGS_NBR=6
+readonly       JOB_RUN="RN_Files_Cmpr.gawk"
+#
+readonly       THIS_JOB_FULL=$0
+readonly       THIS_JOB_SMPL=${0##*/}
+readonly       JOB_OUT=$THIS_JOB_SMPL".outlist"
+readonly       JOB_ERR=$THIS_JOB_SMPL".errlist"
+
+# Parameters.
+#
+# Files.
+declare        FILE_IN_FLTR
+declare        FILE_IN_BASE
+declare        FILE_OT_COMN
+declare        FILE_OT_DIFF
+# Line start and length.
+declare -i     fltr_srt
+declare -i     fltr_len
+declare -i     base_srt
+declare -i     base_len
+
+# Functions.
+function chk_abnd_silent()
+{
+	# Checks return value of command
+	# Called as : chk_abnd_silent $?
+	
+  local     abnd
+  
+  abnd=$1
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  fi
+  
+  return 0
+}
+
+function chk_abnd()
+{
+	# Checks return value of command
+	# Called as : chk_abnd $?
+	# Notes : Prints on screen
+
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  else
+    echo "Done"; echo
+  fi
+  
+  return 0
+}
+
+function house_keep()
+{
+	# Parses arguments
+	# Checks correct number of arguments
+	# Assign parameters to variables
+	# Called as house_keep $# $1 $2 $3 $4 $5 $6
+	
+  local     argc
+  
+  argc=$1
+  chk_abnd_silent $? # Check return status.
+  
+  if [ $argc -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $argc
+      echo "Must be = " $ARGS_NBR
+      echo "Usage: " $THIS_JOB_SMPL " <FILE_IN_FLTR> <FILE_IN_BASE> <FLTR_LINE_START> <FLTR_LINE_LENGTH> <BASE_LINE_START> <BASE_LINE_LENGTH>"
+      echo
+      exit 69
+  fi
+  
+  # Set DD_files names.
+  FILE_IN_FLTR=$2
+  FILE_IN_BASE=$3
+  #
+  FILE_OT_COMN=$FILE_IN_BASE".xstY"
+  FILE_OT_DIFF=$FILE_IN_BASE".xstN"
+  
+  # Set LINES' start and length.
+  fltr_srt=$4
+  fltr_len=$5
+  base_srt=$6
+  base_len=$7
+    
+  chk_abnd $? # Check return status.
+  
+  return 0
+}
+
+############################################################################
+# Script start.
+#
+echo; echo $THIS_JOB_FULL " Started at ""$(date +"%Y-%m-%d %H:%M:%S::%N")"; echo
+echo $THIS_JOB_FULL " Started at ""$(date +"%Y-%m-%d %H:%M:%S::%N")" > $JOB_OUT; echo >> $JOB_OUT
+
+# Check arguments and construct file names.
+house_keep $# $1 $2 $3 $4 $5 $6
+chk_abnd $? # Check return status.
+#
+
+# Check if OT_COMN file exists - If it exists it deletes it
+if [ -f $FILE_OT_COMN ]; then
+  echo "Deleting file " $FILE_OT_COMN " ..."
+  rm $FILE_OT_COMN
+  chk_abnd $? # Check return status.
+fi
+
+# Create file OT_COMN
+echo "Touching file " $FILE_OT_COMN " ..."
+touch $FILE_OT_COMN
+chk_abnd $? # Check return status.
+#
+
+# Check if OT_DIFF file exists - If it exists it deletes it
+if [ -f $FILE_OT_DIFF ]; then
+  echo "Deleting file " $FILE_OT_DIFF " ..."
+  rm $FILE_OT_DIFF
+  chk_abnd $? # Check return status.
+fi
+
+# Create file OT_DIFF
+echo "Touching file " $FILE_OT_DIFF " ..."
+touch $FILE_OT_DIFF
+chk_abnd $? # Check return status.
+#
+
+# On screen report :
+# FILE FILTER, FILE BASE
+# SUBSTRINGS FROM EACH
+echo "FILE_IN_FLTR = @"$FILE_IN_FLTR"@"
+echo "FILE_IN_BASE = @"$FILE_IN_BASE"@"
+echo "FILE_OT_COMN = @"$FILE_OT_COMN"@"
+echo "FILE_OT_DIFF = @"$FILE_OT_DIFF"@"
+echo
+echo "fltr_srt = @"$fltr_srt"@"
+echo "fltr_len = @"$fltr_len"@"
+echo "base_srt = @"$base_srt"@"
+echo "base_len = @"$base_len"@"
+echo
+#
+echo "FILE_IN_FLTR = @"$FILE_IN_FLTR"@" >> $JOB_OUT
+echo "FILE_IN_BASE = @"$FILE_IN_BASE"@" >> $JOB_OUT
+echo "FILE_OT_COMN = @"$FILE_OT_COMN"@" >> $JOB_OUT
+echo "FILE_OT_DIFF = @"$FILE_OT_DIFF"@" >> $JOB_OUT
+echo >> $JOB_OUT
+echo "fltr_srt = @"$fltr_srt"@" >> $JOB_OUT
+echo "fltr_len = @"$fltr_len"@" >> $JOB_OUT
+echo "base_srt = @"$base_srt"@" >> $JOB_OUT
+echo "base_len = @"$base_len"@" >> $JOB_OUT
+echo >> $JOB_OUT
+
+############################################################################
+# Run awk.
+#
+date
+echo "Submit Job " $JOB_RUN " ..."
+echo "out_name = " $JOB_OUT
+echo "err_name = " $JOB_ERR
+#
+date  >> $JOB_OUT
+echo "Submit Job " $JOB_RUN " ..."  >> $JOB_OUT
+echo "out_name = " $JOB_OUT         >> $JOB_OUT
+echo "err_name = " $JOB_ERR         >> $JOB_OUT
+
+
+# Call awk script with given parameters
+$JOB_RUN -b  -v FILE_OT_COMN=$FILE_OT_COMN \
+             -v FILE_OT_DIFF=$FILE_OT_DIFF \
+             -v JOB_OUT=$JOB_OUT           \
+             -v p_fltr_srt=$fltr_srt       \
+             -v p_fltr_len=$fltr_len       \
+             -v p_base_srt=$base_srt       \
+             -v p_base_len=$base_len       \
+             $FILE_IN_FLTR  $FILE_IN_BASE  \
+             2>$JOB_ERR
+# Check return status.
+chk_abnd $?
+#
+
+############################################################################
+# Script end.
+#
+echo; echo >> $JOB_OUT; 
+echo $THIS_JOB_FULL " Ended at   ""$(date +"%Y-%m-%d %H:%M:%S::%N")"; echo
+echo $THIS_JOB_FULL " Ended at   ""$(date +"%Y-%m-%d %H:%M:%S::%N")" >> $JOB_OUT
+chk_abnd $? # Check return status.
+
+sleep 1s
+touch $JOB_OUT $JOB_ERR
+chk_abnd_silent $? # Check return status.
+#
+
+exit $?
+#

@@ -1,0 +1,151 @@
+#!/bin/bash
+
+#################################################################################################
+#                                                                                                                                                                                                                                                                                           ##
+#  Job:           RN_FindFContent.bsh
+#  Location:      /home/tede/n55115/Joblib/Utils/file_processing/FIND_FILES/RUN 
+#  
+#  Description:   Finds files' name in directory recursively
+#                 containing string in body (case (in)sensitive).
+#  
+#################################################################################################
+#
+#  Called by:     RUN.RN_FindFContent.bsh  parm_srch_dir  parm_srch_str  parm_file_out  parm_case
+#  
+#  Parameters:    (see calling script documentation).
+#
+#
+#  Uses globals:  (see calling script documentation).
+#
+#################################################################################################
+#
+#  Function:
+#
+#  {
+#     foreach file in <parm_srch_dir>
+#     {
+#        if file contains <parm_srch_str> <parm_case>
+#           write file name to <parm_file_out>
+#     }
+#  }
+#
+#################################################################################################
+#
+#  Output:        (see calling script documentation).
+#
+#################################################################################################
+
+# Environment variables.
+# --> in .profile
+#
+# --> in RUN.JOB
+#        CASE_SENS
+#        CASE_UNSN
+
+# Parameters.
+declare        parm_srch_dir
+declare        parm_srch_str
+declare        parm_file_out
+declare        parm_case
+
+# Constants.
+readonly       ARGS_NBR=4
+#
+readonly       THIS_JOB_FULL=$0
+readonly       THIS_JOB_SMPL=${0##*/}
+
+# Functions.
+function chk_abnd_silent()
+{
+  local     abnd
+  
+  abnd=$1
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  fi
+  
+  return 0
+}
+
+function chk_abnd()
+{
+	# Checks return value
+	# Called as chk_abnd_silent $?
+	
+  local     abnd
+  
+  abnd=$1
+  date
+  
+  if [ $abnd -ne 0 ]; then
+    echo "Failed with status " $abnd; echo
+    exit $abnd
+  else
+    echo "Done"; echo
+  fi
+  
+  return 0
+}
+
+function house_keep()
+{
+	# Checks parameters (number)
+	# Assign parameters to variables
+	# Called as house_keep $# $1 $2 $3 $4
+	
+  local        nbr_args=$1
+  
+  if [ $nbr_args -ne $ARGS_NBR ]; then
+      echo "Wrong number of parameters = " $nbr_args '. Must be: ' $ARGS_NBR '.'
+      echo "Usage: " $THIS_JOB_SMPL " <parm_srch_dir> <parm_srch_str> <parm_file_out> s|u"
+      exit 69
+  fi
+  
+  parm_srch_dir=$2
+  parm_srch_str=$3
+  parm_file_out=$4
+  parm_case=$5
+
+  chk_abnd_silent $? # Check return status.  
+
+  return 0
+}
+
+############################################################################
+# Script start.
+#
+echo; echo $THIS_JOB_FULL " started at " `date`; echo
+
+# Check arguments and construct file names.
+house_keep $# $1 $2 $3 $4
+chk_abnd $? # Check return status.
+
+echo "parm_srch_dir = @"$parm_srch_dir"@"
+echo "parm_srch_str = @"$parm_srch_str"@"
+echo "parm_file_out = @"$parm_file_out"@"
+echo "parm_case     = @"$parm_case"@"
+echo
+
+# Do work.
+
+# xargs to iterate over file list,
+# grep to look for patterns.
+#
+# If parm_case is case sensitive, then use grep  to get sensitive matches
+if [ $parm_case == $CASE_SENS ]; then
+   find $parm_srch_dir  -type f -print0 | xargs -0 grep -l     $parm_srch_str > $parm_file_out
+else
+# If parm_case is case unsensitive, then use grep -i to get unsensitive matches
+if [ $parm_case == $CASE_UNSN ]; then
+   find $parm_srch_dir  -type f -print0 | xargs -0 grep -l -i  $parm_srch_str > $parm_file_out
+fi
+fi
+#
+
+############################################################################
+# End of script.
+# 
+echo; echo $THIS_JOB_FULL " ended at " `date`
+#
